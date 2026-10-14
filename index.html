@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculadora VE · MF Motor Insight</title>
+<style>
+:root{--bg:#f3f6f5;--card:#fff;--ink:#16211d;--muted:#5a6b65;--line:#d9e2de;--accent:var(--g1);--soft:#e2f4ed;--warn:#9a5b00;--warnb:#fff3df;--bad:#b3261e;--badb:#fdecea;--info:#1d5fa8;--infob:#e8f1fb;--note:#f6f1de;--noteink:#5b4d12;--valle:var(--g1);--media:var(--g5);--punta:var(--g4);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1514;--card:#182120;--ink:#e6efec;--muted:#98aaa4;--line:#2b3936;--accent:#3cc89c;--soft:#15372e;--warn:#f0b35a;--warnb:#3a2c14;--bad:#ff8a80;--badb:#3d1c1a;--info:#7db3ef;--infob:#17283d;--note:#2b2810;--noteink:#e6d98f}}
+:root[data-theme="dark"]{--bg:#0f1514;--card:#182120;--ink:#e6efec;--muted:#98aaa4;--line:#2b3936;--accent:#3cc89c;--soft:#15372e;--warn:#f0b35a;--warnb:#3a2c14;--bad:#ff8a80;--badb:#3d1c1a;--info:#7db3ef;--infob:#17283d;--note:#2b2810;--noteink:#e6d98f}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header,main,.bar{max-width:1180px;margin:0 auto;padding-left:16px;padding-right:16px}
+header{padding-top:20px}h1{margin:0 0 4px;font-size:1.5rem}header p{margin:0;color:var(--muted)}
+.bar{display:flex;gap:8px;justify-content:flex-end;padding-top:8px}
+.bar button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.85rem}
+main{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:18px;padding-top:12px;padding-bottom:40px}
+@media(max-width:880px){main{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.card h2{font-size:1.02rem;margin:0 0 10px}
+label{display:block;font-size:.88rem;font-weight:600;margin:12px 0 4px}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.note{background:var(--note);color:var(--noteink);border-radius:8px;padding:7px 10px;margin:5px 0 0;font-size:.8rem;line-height:1.45}
+.note b{font-weight:700}body.nonotes .note{display:none}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;padding:9px 6px;border:0;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.seg button.on{background:var(--accent);color:var(--onacc);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chips button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:20px;padding:4px 10px;font-size:.8rem;cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .l{font-size:.78rem;color:var(--muted)}.kpi .v{font-size:1.45rem;font-weight:700}
+.kpi.main{background:var(--soft);border-color:var(--accent)}.kpi.main .v{color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.8rem}.r{text-align:right}
+.al{border-left:4px solid;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:.9rem}
+.al.ok{border-color:var(--accent);background:var(--soft)}.al.warn{border-color:var(--warn);background:var(--warnb)}
+.al.bad{border-color:var(--bad);background:var(--badb)}.al.info{border-color:var(--info);background:var(--infob)}
+.obs{margin-top:10px}.obs h3{font-size:.88rem;margin:0 0 2px;color:var(--accent)}
+.concl{margin-top:10px;padding:10px 12px;border:1px dashed var(--accent);border-radius:8px;font-size:.92rem}.concl b{color:var(--accent)}
+.fr{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line);margin:8px 0 4px}.fr span{display:block;height:100%}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cmp>div{padding:10px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}.cmp .big{font-size:1.3rem;font-weight:700}
+.sm{font-size:.8rem;color:var(--muted)}.hide{display:none}
+.final{background:var(--soft);border-color:var(--accent)}
+footer{max-width:1180px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font-size:.8rem}
+#rep{display:none;background:#fff;color:#111;font:13px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#rep h1{font-size:20px;margin:0 0 2px}#rep .sub{color:#555;margin:0 0 6px}
+#rep h2{font-size:14px;margin:16px 0 6px;border-bottom:2px solid #0b7a5c;padding-bottom:2px;color:var(--g1)}
+#rep table{width:100%;border-collapse:collapse;font-size:12.5px}#rep td{border-bottom:1px solid #ddd;padding:4px 6px;text-align:left}#rep td.r{text-align:right}
+#rep .box{border:1px solid #0b7a5c;background:#e8f5ef;padding:8px 10px;border-radius:6px;margin:6px 0}
+#rep ul{margin:4px 0 0 18px;padding:0}#rep li{margin:4px 0}#rep .pie{margin-top:14px;font-size:11px;color:#666}
+/* ===== Paleta en escala de grises (estilo Kia) ===== */
+:root{--bg:#f2f2f2;--card:#fff;--ink:#0d0d0d;--muted:#666;--line:#d4d4d4;--accent:#111;--onacc:#fff;--soft:#ebebeb;--warn:#4d4d4d;--warnb:#f4f4f4;--bad:#000;--badb:#e3e3e3;--info:#5c5c5c;--infob:#f7f7f7;--note:#efefef;--noteink:#2b2b2b;--valle:#c8c8c8;--media:#8a8a8a;--punta:#2b2b2b;
+ --g1:#1f9d74;--g2:#2f6fd6;--g3:#d9822b;--g4:#c0392b;--g5:#d9a400;--g6:#cfe9f5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0c0c;--card:#181818;--ink:#f2f2f2;--muted:#a3a3a3;--line:#323232;--accent:#f2f2f2;--onacc:#111;--soft:#242424;--warn:#bdbdbd;--warnb:#202020;--bad:#fff;--badb:#2c2c2c;--info:#9c9c9c;--infob:#1d1d1d;--note:#222;--noteink:#ddd;--valle:#4a4a4a;--media:#8a8a8a;--punta:#e6e6e6;
+ --g1:#3cc89c;--g2:#79a8ff;--g3:#f0a050;--g4:#ff7a6b;--g5:#f2c84b;--g6:#9ec3d6;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c0c0c;--card:#181818;--ink:#f2f2f2;--muted:#a3a3a3;--line:#323232;--accent:#f2f2f2;--onacc:#111;--soft:#242424;--warn:#bdbdbd;--warnb:#202020;--bad:#fff;--badb:#2c2c2c;--info:#9c9c9c;--infob:#1d1d1d;--note:#222;--noteink:#ddd;--valle:#4a4a4a;--media:#8a8a8a;--punta:#e6e6e6;
+ --g1:#3cc89c;--g2:#79a8ff;--g3:#f0a050;--g4:#ff7a6b;--g5:#f2c84b;--g6:#9ec3d6;color-scheme:dark}
+/* colores fijos de gráficos → grises temáticos (las reglas CSS ganan a los atributos SVG) */
+:root [fill="#1f9d74"],:root [fill="#2e8b57"],:root [fill="#0b7a5c"]{fill:var(--g1)}:root [stroke="#1f9d74"],:root [stroke="#2e8b57"]{stroke:var(--g1)}
+:root [fill="#2f6fd6"]{fill:var(--g2)}:root [stroke="#2f6fd6"]{stroke:var(--g2)}
+:root [fill="#d9822b"]{fill:var(--g3)}:root [stroke="#d9822b"]{stroke:var(--g3)}
+:root [fill="#c0392b"]{fill:var(--g4)}:root [stroke="#c0392b"]{stroke:var(--g4)}
+:root [fill="#d9a400"]{fill:var(--g5)}:root [stroke="#d9a400"]{stroke:var(--g5)}
+:root [fill="#cfe9f5"]{fill:var(--g6)}
+.al{border-left-width:5px}.al.bad{border-left-width:7px}
+body{letter-spacing:.005em}
+h1,h2{letter-spacing:-.01em}
+/* ===== Marca MF Motor Insight ===== */
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.logo{width:46px;height:46px;flex:none}
+.lg-bg{fill:var(--ink)}.lg-trk{fill:none;stroke:var(--card);stroke-width:3.2;stroke-linecap:round;opacity:.28}
+.lg-arc{fill:none;stroke:var(--card);stroke-width:3.2;stroke-linecap:round}.lg-tk line{stroke:var(--card);stroke-width:1.6;opacity:.6}.lg-bolt{fill:var(--card)}
+.wm{line-height:1.05}.wm b{display:block;font-size:1.02rem;letter-spacing:.2em;font-weight:800}
+.wm span{display:block;font-size:.66rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;margin-top:3px}
+.foot-brand{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+.foot-brand .logo{width:30px;height:30px}
+/* ===== Modo Kia ===== */
+.kbadge{display:inline-block;background:var(--ink);color:var(--card);font-weight:800;letter-spacing:.18em;font-size:.72rem;padding:3px 9px;border-radius:4px;vertical-align:middle;margin-right:6px}
+#kiaFicha table{font-size:.84rem;margin-top:8px}#kiaFicha td{padding:5px 6px}
+.kia-only{display:none}body.kia .kia-only{display:block}body.kia .gen-only{display:none}
+/* ===== Beneficios ===== */
+.bwrap{max-width:1180px;margin:0 auto;padding:12px 16px 40px}
+.hero{background:var(--ink);color:var(--card);border-radius:14px;padding:22px 20px;margin-bottom:16px}
+.hero h2{margin:0 0 6px;font-size:1.35rem}.hero .kbadge{background:var(--card);color:var(--ink)}.hero p{margin:0;opacity:.8;max-width:760px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:16px}
+.stats div{border:1px solid rgba(127,127,127,.45);border-radius:10px;padding:10px 12px}
+.stats b{display:block;font-size:1.45rem}.stats span{font-size:.78rem;opacity:.75}
+.cmpt{width:100%;border-collapse:collapse;font-size:.86rem}.cmpt th,.cmpt td{border-bottom:1px solid var(--line);padding:8px 6px;vertical-align:top;text-align:left}
+.cmpt tr.k td{background:var(--soft);font-weight:600}
+.tscroll{overflow-x:auto}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px}.bgrid .card{margin:0}
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.mods button{text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit}
+.mods button:hover{border-color:var(--ink)}.mods b{display:block;font-size:1.05rem}.mods span{font-size:.78rem;color:var(--muted)}
+.src{font-size:.78rem;color:var(--muted)}.src a{color:inherit}
+
+.mini{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:0 0 10px;padding:4px 6px}
+.mini svg{width:100%;height:auto;display:block;max-height:120px}.mini text{fill:var(--ink);font-size:12px}.mini .mm{fill:var(--muted);font-size:11px}
+@keyframes drip{0%{transform:translateY(0);opacity:1}100%{transform:translateY(14px);opacity:0}}
+#pchart{width:100%;height:auto;display:block}#pchart .pt{fill:var(--muted);font-size:11px}
+.drawl{stroke-dasharray:600;animation:draw 3s ease-out both}
+h3.sub{font-size:.95rem;margin:16px 0 4px;padding-top:10px;border-top:1px solid var(--line)}
+tr.tot td{background:var(--soft);font-weight:700}
+#rep.show{display:block;position:fixed;inset:0;z-index:60;overflow:auto;padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 30px max(16px,env(safe-area-inset-left,0px))}
+.repbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}.repbar button{border:1px solid #999;background:#fff;color:#111;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+.rephint{font-size:12px;color:#555;margin:0 0 10px}
+@media print{.repbar,.rephint{display:none}#rep.show{position:static;padding:0}}
+/* ---------- Pestañas ---------- */
+.tabs{max-width:1180px;margin:12px auto 0;padding:0 16px;display:flex;gap:6px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:1px solid transparent;border-bottom:0;background:none;color:var(--muted);padding:9px 16px;border-radius:10px 10px 0 0;cursor:pointer;font:inherit;font-weight:600;white-space:nowrap}
+.tabs button.on{background:var(--card);color:var(--accent);border-color:var(--line);margin-bottom:-1px}
+.pane.hide{display:none}
+/* ---------- Gráfico de recorrido ---------- */
+.trip svg{width:100%;height:auto;display:block;touch-action:none;user-select:none}
+.trip .ax{stroke:var(--line);stroke-width:1}
+.trip .grid{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4}
+.trip text{fill:var(--muted);font-size:11px;font-family:inherit}
+.trip .lb{stroke:var(--g1);stroke-width:3;fill:none}
+.trip .la{stroke:var(--g2);stroke-width:3;fill:none}
+.trip .lg{stroke:var(--g3);stroke-width:3;fill:none;stroke-dasharray:7 5}
+.trip .cur{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3}
+.trip .road{fill:var(--line)}
+.trip .roadln{stroke:var(--card);stroke-width:2;stroke-dasharray:10 8}
+.trip .car{cursor:grab}.trip .car:active{cursor:grabbing}
+.vals{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px}
+.vals>div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg)}
+.vals .l{font-size:.76rem;color:var(--muted)}.vals .v{font-size:1.2rem;font-weight:700}
+.ctrl{display:flex;gap:10px;align-items:center;margin-top:10px}
+.ctrl input[type=range]{flex:1;padding:0;accent-color:var(--accent)}
+.ctrl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 12px;cursor:pointer;font:inherit;white-space:nowrap}
+/* ---------- Conceptos ---------- */
+.cgrid{max-width:1180px;margin:0 auto;padding:12px 16px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:16px}
+.cgrid .card{margin:0}
+.cgrid h2 .tag{font-size:.72rem;font-weight:600;background:var(--soft);color:var(--accent);padding:2px 8px;border-radius:20px;margin-left:6px}
+.anim{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px;margin:10px 0}
+.anim svg{width:100%;height:auto;display:block}
+.anim text{fill:var(--ink);font-size:12px;font-family:inherit}
+.anim .mut{fill:var(--muted);font-size:11px}
+.formula{font-family:ui-monospace,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:.86rem;margin:8px 0;overflow-x:auto}
+.cgrid p{margin:6px 0}
+.intro{max-width:1180px;margin:0 auto;padding:14px 16px 0;color:var(--muted)}
+.ed{min-height:32px;margin-top:10px;padding:8px 10px;border:1px dashed var(--line);border-radius:8px;font-size:.86rem;outline:none}
+.ed:empty:before{content:attr(data-ph);color:var(--muted)}.ed:focus{border-color:var(--accent)}
+/* animaciones */
+@keyframes flow{to{stroke-dashoffset:-40}}
+.flow{stroke-dasharray:6 14;animation:flow 1s linear infinite}
+.flow.slow{animation-duration:2.6s}.flow.fast{animation-duration:.45s}
+@keyframes fillUp{0%{height:0;y:150}100%{height:120px;y:30}}
+@keyframes socLvl{0%,10%{width:20px}60%,75%{width:128px}100%{width:20px}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes draw{from{stroke-dashoffset:600}to{stroke-dashoffset:0}}
+@keyframes heat{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
+@keyframes sine{to{transform:translateX(-60px)}}
+@keyframes bar{0%,10%{transform:scaleX(0)}50%,100%{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media print{html,body{background:#fff}header,main,.bar,footer,.tabs,.pane{display:none!important}#rep{display:block}h2,table,.box{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" class="lg-bg"/><path d="M12 44 A20 20 0 0 1 52 44" class="lg-trk"/><path d="M12 44 A20 20 0 0 1 46.1 29.9" class="lg-arc"/><g class="lg-tk"><line x1="12" y1="44" x2="16" y2="44"/><line x1="17.9" y1="29.9" x2="20.7" y2="32.7"/><line x1="32" y1="24" x2="32" y2="28"/><line x1="46.1" y1="29.9" x2="43.3" y2="32.7"/><line x1="52" y1="44" x2="48" y2="44"/></g><path d="M34.5 27 L26 40 H31.5 L28.5 51 L38.5 35.5 H33 Z" class="lg-bolt"/></svg><div class="wm"><b>MF MOTOR INSIGHT</b><span>Inteligencia de costos para movilidad eléctrica</span></div></div>
+  <h1>⚡ Calculadora de carga de vehículo eléctrico — Ecuador</h1>
+  <p>Cada dato tiene una nota que explica qué es y cómo influye. Abajo verás conclusiones y observaciones según lo que ingreses.</p>
+</header>
+<div class="bar"><button id="tn">📝 Ocultar notas</button><button onclick="reporte()">🧾 Ver reporte</button><button id="theme">🌓 Tema</button></div>
+<nav class="tabs" role="tablist"><button class="on" data-tab="pCalc" data-mode="all" role="tab">🧮 Calculadora general</button><button data-tab="pCalc" data-mode="kia" role="tab"><span class="kbadge">KIA</span>Calculadora</button><button data-tab="pKia" role="tab">🏆 Beneficios KIA</button><button data-tab="pConc" role="tab">📘 Conceptos técnicos</button></nav>
+
+<div class="pane" id="pCalc">
+<main>
+<section>
+  <div class="card">
+    <h2>1. Vehículo </h2>
+    <label for="modelo">Modelo</label><select id="modelo"></select>
+    <div id="kiaFicha" class="kia-only"></div>
+    <p class="note kia-only"><b>Modo KIA:</b> al elegir la versión se cargan los datos de la ficha técnica Kia Ecuador, incluida la autonomía real sugerida. Puedes corregir cualquier número abajo.</p>
+    <p class="note gen-only"><b>Qué es:</b> el auto que vas a cargar. Los modelos están agrupados por marca y cada uno muestra su batería en kWh. El # indica el puesto entre los 11 eléctricos más vendidos en Ecuador (enero a septiembre de 2026, según la Aeade). <b>Cómo funciona:</b> al elegirlo se llenan solos batería, autonomía y límites de carga. Si tu versión es distinta, corrige los números abajo o elige «Otro».</p>
+    <div class="row">
+      <div><label for="bat">Batería útil (kWh)</label><input id="bat" type="number" step="0.1" min="5"></div>
+      <div><label for="auto">Autonomía declarada (km)</label><input id="auto" type="number" min="50"></div>
+    </div>
+    <p class="note"><b>Batería útil:</b> es el «tanque» del auto en kWh; define cuánta energía cabe. <b>Autonomía declarada:</b> km que promete el fabricante con 100 %; sirve para calcular cuántos km ganas por cada carga.</p>
+    <div class="row">
+      <div><label for="acmax">Máx. AC (kW)</label><input id="acmax" type="number" step="0.1" min="1"></div>
+      <div><label for="dcmax">Máx. DC (kW)</label><input id="dcmax" type="number" min="0"></div>
+    </div>
+    <p class="note"><b>Qué es:</b> la potencia máxima que el auto acepta, aunque el cargador entregue más. AC es la carga lenta (casa o poste), DC es la rápida. <b>Cómo funciona:</b> la potencia efectiva es la menor entre la del cargador y la del auto.</p>
+  </div>
+
+  <div class="card">
+    <h2>2. Estado de carga</h2>
+    <div class="row">
+      <div><label for="soc0">% actual</label><input id="soc0" type="number" min="0" max="99" value="20"></div>
+      <div><label for="soc1">% objetivo</label><input id="soc1" type="number" min="1" max="100" value="80"></div>
+    </div>
+    <div class="chips"><button data-t="80">Meta 80 %</button><button data-t="90">Meta 90 %</button><button data-t="100">Meta 100 %</button></div>
+    <p class="note"><b>Qué es:</b> cuánta batería tienes hoy y hasta dónde quieres llegar. <b>Cómo funciona:</b> la diferencia entre ambos es la energía que se compra. Para uso diario se recomienda quedarse entre 20 % y 80 %: cuida la batería y, en rápida, evita el tramo más lento.</p>
+  </div>
+
+  <div class="card">
+    <h2>3. Lugar y cargador</h2>
+    <div class="seg" id="lugar"><button data-v="casa" class="on">🏠 Domicilio</button><button data-v="electro">⛽ Electrolinera</button></div>
+    <p class="note"><b>Domicilio</b> usa tu tarifa eléctrica (la más barata). <b>Electrolinera</b> cobra un precio comercial por kWh, varias veces mayor.</p>
+    <div id="boxTipo" class="hide">
+      <label>Tipo de cargador</label>
+      <div class="seg" id="tipo"><button data-v="DC" class="on">DC (rápida)</button><button data-v="AC">AC (semirrápida)</button></div>
+      <p class="note"><b>DC:</b> convierte la corriente fuera del auto; es muy rápida, pero más cara y se frena sobre 80 %. <b>AC:</b> el auto convierte con su propio cargador, es más lenta y económica.</p>
+    </div>
+    <label for="kw">Potencia del cargador (kW)</label><input id="kw" type="number" step="0.1" min="1" value="7.4">
+    <div class="chips" id="chipsKw"></div>
+    <p class="note"><b>Qué es:</b> los kW que entrega el equipo. <b>Cómo funciona:</b> tiempo ≈ energía ÷ potencia. Una toma de 220 V da ~3,3 kW, un wallbox de 7,4 kW carga el doble de rápido. Más kW que el límite del auto no sirven.</p>
+
+    <details class="note" style="margin-top:10px"><summary><b>¿Cómo usa la calculadora esta sección?</b></summary>
+<p><b>1. Potencia efectiva</b> = la menor entre los kW del cargador y el límite del auto (AC o DC según el tipo).</p>
+<p><b>2. Energía de la red</b> = energía que entra a la batería ÷ (1 − pérdidas). Eso es lo que se cobra.</p>
+<p><b>3. Tiempo:</b> recorre la carga de a 0,25 % y calcula energía ÷ potencia. En AC la potencia es constante (baja al 60 % sobre 95 %). En DC usa el 85 % de la potencia hasta 80 % y luego cae hasta 30 %.</p>
+<p><b>4. Costo en casa con tarifa VE:</b> usa la hora de inicio y suma el tramo de cada franja (valle, media, punta) por su precio. Con tarifa general: kWh × precio único.</p>
+<p><b>5. Electrolinera:</b> kWh × precio + cargo fijo. No depende de la hora.</p></details>
+    <div id="boxCasa">
+      <label for="tmodo">Tarifa en domicilio</label>
+      <select id="tmodo"><option value="ve">Tarifa para VE (por horario)</option><option value="gen">Tarifa residencial general</option></select>
+      <p class="note"><b>Tarifa VE:</b> se solicita a la distribuidora y cobra menos de noche. <b>General:</b> la planilla normal, sin horario.</p>
+      <div id="boxVE">
+        <label for="hora">Hora de inicio de la carga</label><input id="hora" type="time" value="22:00">
+        <p class="note"><b>Cómo funciona:</b> la calculadora recorre la carga minuto a minuto y cobra cada tramo según la franja en la que cae. Iniciar a las 22:00 evita la hora punta.</p>
+        <div class="row3">
+          <div><label for="tV">22–08 h</label><input id="tV" type="number" step="0.001" value="0.05"></div>
+          <div><label for="tM">08–18 h</label><input id="tM" type="number" step="0.001" value="0.08"></div>
+          <div><label for="tP">18–22 h</label><input id="tP" type="number" step="0.001" value="0.10"></div>
+        </div>
+        <p class="note"><b>Qué es:</b> USD por kWh en horario valle, medio y punta (días laborables, ARCERNNR). Confirma los valores con tu distribuidora.</p>
+      </div>
+      <div id="boxGen" class="hide">
+        <label for="tG">Tarifa residencial (USD/kWh)</label><input id="tG" type="number" step="0.001" value="0.10">
+        <p class="note"><b>Qué es:</b> precio promedio por kWh de tu planilla (≈ 0,10 a nivel nacional). Se aplica igual a toda hora.</p>
+      </div>
+    </div>
+    <div id="boxEl" class="hide">
+      <div class="kia-only"><label for="red">Red de carga</label><select id="red"><option value="0">Red de carga Kia — sin costo para clientes Kia</option><option value="0.25">Electrolinera comercial (≈ USD 0,25/kWh)</option></select>
+      <p class="note"><b>Beneficio Kia:</b> según Kia Ecuador, sus +20 electrolineras ultrarrápidas y +250 puntos intermedios no tienen costo para clientes Kia. Elige «comercial» para comparar.</p></div>
+      <label for="tE">Precio en electrolinera (USD/kWh)</label><input id="tE" type="number" step="0.01" value="0.25">
+      <p class="note"><b>Qué es:</b> lo que cobra el operador por kWh (referencia: 0,25 a 0,285). Es el precio más variable, ajústalo al operador que uses.</p>
+      <label for="fijo">Cargo fijo / parqueo (USD)</label><input id="fijo" type="number" step="0.01" value="0">
+      <p class="note"><b>Qué es:</b> cobros extra por sesión o estacionamiento. Se suma al total; déjalo en 0 si no aplica.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>4. Supuestos y comparación</h2>
+    <label for="perd">Pérdidas de carga (%)</label><input id="perd" type="number" step="0.5" min="0" max="30" value="12">
+    <p class="note"><b>Qué es:</b> energía que se pierde como calor al cargar. <b>Cómo funciona:</b> pagas más kWh de los que llegan a la batería. Típico: 10–15 % en AC y 5–8 % en DC (se ajusta solo al cambiar de lugar).</p>
+    <label for="real">Autonomía real vs. declarada (%)</label><input id="real" type="number" min="40" max="110" value="85">
+    <p class="note"><b>Qué es:</b> cuánto del rango oficial logras en la práctica. En Quito (altura, pendientes, tráfico) 80–90 % es razonable. Cuanto menor sea, más caro sale cada km.</p>
+    <div class="row">
+      <div><label for="gtipo">Combustible</label><select id="gtipo"><option value="3.17">Extra / Ecopaís</option><option value="5.42">Súper (referencial)</option></select></div>
+      <div><label for="gp">USD/galón</label><input id="gp" type="number" step="0.01" value="3.17"></div>
+    </div>
+    <label for="kmgal">Rendimiento a gasolina (km/galón)</label><input id="kmgal" type="number" value="40">
+    <p class="note"><b>Para qué:</b> compara el costo de recorrer los mismos km con un auto a gasolina. Mientras MENOS km/galón rinda el auto, MÁS gasolina gasta y más caro sale (5 km/gal ≈ 47 L/100 km, un camión pesado; 40 km/gal ≈ 9,5 L/100 km, SUV compacto urbano). Precios vigentes del 12-oct al 11-nov-2026: Extra/Ecopaís 3,17 (fijado por el Gobierno); Súper 5,42 referencial (liberalizado, cada gasolinera cobra distinto).</p>
+    <label for="kmmes">Km que recorres al mes</label><input id="kmmes" type="number" value="1200">
+    <p class="note"><b>Para qué:</b> proyecta el gasto mensual y anual repitiendo este tipo de carga. Sin este dato solo verías el costo de una carga.</p>
+  </div>
+</section>
+
+<section>
+  <div class="kpis">
+    <div class="kpi main"><div class="l">Costo de la carga</div><div class="v" id="kC">—</div></div>
+    <div class="kpi"><div class="l">Energía de la red</div><div class="v" id="kE">—</div></div>
+    <div class="kpi"><div class="l">Tiempo</div><div class="v" id="kT">—</div></div>
+    <div class="kpi"><div class="l">Costo por km</div><div class="v" id="kK">—</div></div>
+  </div>
+  <div id="glob"></div>
+
+  <div class="card final"><h2>🧭 Resumen de tus datos</h2><div id="resumen"></div></div>
+
+  <div class="card"><h2>🔋 Energía</h2><div class="mini"><svg viewBox="0 0 520 90" aria-hidden="true">
+ <rect x="8" y="22" width="78" height="46" rx="8" fill="#2f6fd6" opacity=".18"/><text x="20" y="44">Red</text><text x="20" y="60" class="mm">kWh pagados</text>
+ <line x1="86" y1="45" x2="380" y2="45" stroke="#2f6fd6" stroke-width="10" class="flow"/>
+ <path d="M200 38 Q215 20 232 10" stroke="#c0392b" stroke-width="4" fill="none" class="flow"/>
+ <g fill="#c0392b"><circle cx="226" cy="18" r="3.5" style="animation:heat 1.6s infinite"/><circle cx="238" cy="22" r="3" style="animation:heat 1.6s .5s infinite"/></g>
+ <text x="246" y="18" class="mm" style="fill:var(--g4)">pérdidas en calor</text>
+ <rect x="384" y="18" width="110" height="54" rx="8" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="2.5"/><rect x="494" y="36" width="7" height="18" rx="2" fill="currentColor" style="color:var(--muted)"/>
+ <rect x="388" y="22" height="46" rx="5" fill="#1f9d74"><animate attributeName="width" values="8;102;102;8" keyTimes="0;.8;.95;1" dur="6s" repeatCount="indefinite"/></rect>
+ <text x="404" y="88" class="mm">kWh en la batería</text></svg></div><table id="tE2"></table><div class="obs" id="oE"></div><div class="concl" id="cE"></div></div>
+  <div class="card"><h2>⏱️ Tiempo de carga</h2><div class="mini"><svg viewBox="0 0 520 90" aria-hidden="true">
+ <rect x="8" y="16" width="70" height="58" rx="8" fill="#d9a400" opacity=".25"/><path d="M46 24 L33 47 H42 L37 66 L54 40 H45 Z" fill="#d9a400"/>
+ <line x1="78" y1="45" x2="250" y2="45" stroke="#2f6fd6" stroke-width="8" class="flow fast"/>
+ <text x="96" y="30" class="mm">potencia efectiva (kW)</text>
+ <rect x="252" y="20" width="96" height="50" rx="8" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="2.5"/>
+ <rect x="256" y="24" height="42" rx="5" fill="#1f9d74"><animate attributeName="width" values="6;88;88;6" keyTimes="0;.75;.95;1" dur="5s" repeatCount="indefinite"/></rect>
+ <g transform="translate(430 45)"><circle r="30" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="3"/>
+  <line x1="0" y1="0" x2="0" y2="-22" stroke="#c0392b" stroke-width="3" stroke-linecap="round" style="transform-origin:0 0;animation:spin 5s linear infinite"/><circle r="3.5" fill="#c0392b"/></g>
+ <text x="370" y="88" class="mm">tiempo = kWh ÷ kW</text></svg></div><table id="tT"></table><div class="obs" id="oT"></div><div class="concl" id="cT"></div></div>
+  <div class="card"><h2>💲 Costo</h2><div class="mini"><svg viewBox="0 0 520 90" aria-hidden="true">
+ <text x="10" y="16" class="mm">0 h</text><text x="160" y="16" class="mm">8 h</text><text x="345" y="16" class="mm">18 h</text><text x="415" y="16" class="mm">22 h</text><text x="490" y="16" class="mm">24 h</text>
+ <rect x="10" y="24" width="155" height="22" fill="#2e8b57"/><rect x="165" y="24" width="195" height="22" fill="#d9a400"/><rect x="360" y="24" width="78" height="22" fill="#c0392b"/><rect x="438" y="24" width="72" height="22" fill="#2e8b57"/>
+ <g><animateTransform attributeName="transform" type="translate" values="0 0;500 0" dur="9s" repeatCount="indefinite"/>
+  <path d="M10 50 l-7 12 h14 z" fill="currentColor" style="color:var(--ink)"/><circle cx="10" cy="72" r="8" fill="#d9a400"/><text x="6" y="76" font-size="10" style="fill:#fff">$</text></g>
+ <text x="190" y="86" class="mm">valle USD 0,05 · media 0,08 · punta 0,10 por kWh</text></svg></div><div id="fr"></div><table id="tC"></table><div class="obs" id="oC"></div><div class="concl" id="cC"></div></div>
+  <div class="card"><h2>🛣️ Autonomía y costo por km</h2><div class="mini"><svg viewBox="0 0 520 90" aria-hidden="true">
+ <rect x="0" y="58" width="520" height="16" fill="currentColor" style="color:var(--line)"/><line x1="0" y1="66" x2="520" y2="66" stroke="currentColor" style="color:var(--card)" stroke-width="2" stroke-dasharray="14 10"/>
+ <g><animateTransform attributeName="transform" type="translate" values="0 0;430 0" dur="7s" repeatCount="indefinite"/>
+  <path d="M10 56 L14 46 Q17 42 24 42 L32 34 Q35 31 42 31 L52 31 Q58 31 61 37 L64 42 Q70 43 70 49 L70 56 Z" fill="#0b7a5c"/>
+  <circle cx="24" cy="58" r="6" fill="#222"/><circle cx="56" cy="58" r="6" fill="#222"/>
+  <rect x="20" y="12" width="40" height="14" rx="3" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="1.5"/>
+  <rect x="22" y="14" height="10" rx="2" fill="#1f9d74"><animate attributeName="width" values="36;3" dur="7s" repeatCount="indefinite"/></rect></g>
+ <text x="300" y="20" class="mm">la batería baja a medida que avanzas</text><text x="300" y="36" class="mm">km reales ≈ autonomía × % real</text></svg></div><table id="tK"></table><div class="obs" id="oK"></div><div class="concl" id="cK"></div></div>
+  <div class="card"><h2>⛽ Comparación con gasolina</h2><div class="mini"><svg viewBox="0 0 520 90" aria-hidden="true">
+ <rect x="20" y="14" width="44" height="62" rx="6" fill="#d9822b" opacity=".3"/><rect x="28" y="22" width="28" height="14" rx="2" fill="#d9822b"/><path d="M64 30 h12 v30" stroke="#d9822b" stroke-width="3" fill="none"/>
+ <g fill="#d9822b"><path d="M76 62 q-4 6 0 9 q4 -3 0 -9" style="animation:drip 1.4s infinite"/></g>
+ <text x="96" y="36">Gasolina</text><text x="96" y="54" class="mm">galones × precio</text>
+ <rect x="200" y="76" width="40" rx="3" fill="#d9822b"><animate attributeName="height" values="2;56;56;2" keyTimes="0;.7;.95;1" dur="6s" repeatCount="indefinite"/><animate attributeName="y" values="74;20;20;74" keyTimes="0;.7;.95;1" dur="6s" repeatCount="indefinite"/></rect>
+ <rect x="290" y="14" width="44" height="62" rx="6" fill="#1f9d74" opacity=".25"/><path d="M314 22 L302 46 H311 L306 68 L323 40 H314 Z" fill="#1f9d74"/>
+ <text x="346" y="36">Eléctrico</text><text x="346" y="54" class="mm">kWh × tarifa</text>
+ <rect x="470" y="76" width="40" rx="3" fill="#1f9d74"><animate attributeName="height" values="2;10;10;2" keyTimes="0;.7;.95;1" dur="6s" repeatCount="indefinite"/><animate attributeName="y" values="74;66;66;74" keyTimes="0;.7;.95;1" dur="6s" repeatCount="indefinite"/></rect>
+ <text x="190" y="14" class="mm">$ por km</text><text x="460" y="56" class="mm">$ por km</text></svg></div>
+    <div class="cmp"><div><div class="sm">Eléctrico (esta carga)</div><div class="big" id="vE">—</div></div><div><div class="sm">Gasolina (mismos km)</div><div class="big" id="vG">—</div></div></div>
+    <div class="obs" id="oG"></div><div class="concl" id="cG"></div></div>
+
+  <div class="card trip"><h2>🚗 Recorrido: mueve el auto sobre el eje de kilómetros</h2>
+    <p class="note"><b>Cómo se usa:</b> arrastra el auto (o la barra de abajo) por el eje X. El auto sale en el km 0 con la batería del <b>% objetivo</b> y avanza hasta quedar en 0 %. La línea punteada vertical marca, en ese km, el <b>% de batería</b> (eje izquierdo), la <b>autonomía restante</b> y los <b>galones</b> que habría gastado un auto a gasolina (eje derecho).</p>
+    <svg id="trip" viewBox="0 0 680 360" role="img" aria-label="Gráfico de recorrido: kilómetros contra batería, autonomía y galones"></svg>
+    <div class="ctrl"><input id="kmS" type="range" min="0" max="100" step="1" value="0" aria-label="Kilómetros recorridos"><button id="play">▶ Animar</button></div>
+    <div class="leg" style="margin-top:8px"><span><i class="dot" style="background:var(--g1)"></i>% batería (eje izq.)</span><span><i class="dot" style="background:var(--g2)"></i>Autonomía restante, km (eje der.)</span><span><i class="dot" style="background:var(--g3)"></i>Galones gastados a gasolina (eje der.)</span></div>
+    <div class="vals">
+      <div><div class="l">Km recorridos</div><div class="v" id="vKm">0</div></div>
+      <div><div class="l">Batería</div><div class="v" id="vSoc" style="color:var(--g1)">—</div></div>
+      <div><div class="l">Autonomía restante</div><div class="v" id="vAut" style="color:var(--g2)">—</div></div>
+      <div><div class="l">Galones a gasolina</div><div class="v" id="vGal" style="color:var(--g3)">—</div></div>
+      <div><div class="l">Costo eléctrico</div><div class="v" id="vCe">—</div></div>
+      <div><div class="l">Costo gasolina</div><div class="v" id="vCg">—</div></div>
+    </div>
+    <div class="obs" id="oR"></div><div class="concl" id="cR"></div>
+  </div>
+
+  <div class="card" id="proyCard"><h2>📊 Proyección a 160.000 km: energía y mantenimiento</h2>
+    <p class="note"><b>Qué es:</b> lo que gastarías en energía y en mantenimientos durante 160.000 km, el mismo kilometraje que cubre la garantía de batería. <b>Cómo funciona:</b> usa tu consumo (kWh/100 km), tus tarifas y el rendimiento a gasolina de arriba. Los valores de mantenimiento son referenciales y editables: reemplázalos con tu tablero de precios.</p>
+    <svg id="pchart" viewBox="0 0 680 260" role="img" aria-label="Costo acumulado gasolina vs eléctrico hasta 160.000 km"></svg>
+    <div class="leg"><span><i class="dot" style="background:var(--g3)"></i>Gasolina: combustible + mantenimiento</span><span><i class="dot" style="background:var(--g1)"></i>Eléctrico: electricidad + mantenimiento</span></div>
+
+    <h3 class="sub">⚡ Energía: gasolina vs electricidad</h3>
+    <div class="row"><div><label for="hcasa">% de cargas en casa</label><input id="hcasa" type="number" min="0" max="100" value="90"></div>
+      <div><label>Resto en electrolinera</label><input id="hel" type="text" disabled></div></div>
+    <p class="note"><b>Para qué:</b> a largo plazo casi nadie carga siempre en el mismo lugar. Las cargas en casa usan la tarifa de domicilio (valle si tienes tarifa VE) y el resto el precio de electrolinera ingresado arriba.</p>
+    <div class="tscroll"><table id="tPE"></table></div>
+
+    <h3 class="sub">🔧 Mantenimientos: gasolina vs eléctrico</h3>
+    <div class="row3">
+      <div><label for="gInt">Gasolina: cada (km)</label><input id="gInt" type="number" step="1000" value="5000"></div>
+      <div><label for="gCost">USD por mant.</label><input id="gCost" type="number" step="5" value="120"></div>
+      <div><label for="gWear">Desgaste USD/10.000 km</label><input id="gWear" type="number" step="5" value="60"></div>
+    </div>
+    <div class="row3">
+      <div><label for="eInt">Eléctrico: cada (km)</label><input id="eInt" type="number" step="1000" value="10000"></div>
+      <div><label for="eCost">USD por mant.</label><input id="eCost" type="number" step="5" value="90"></div>
+      <div><label for="eWear">Desgaste USD/10.000 km</label><input id="eWear" type="number" step="5" value="25"></div>
+    </div>
+    <p class="note"><b>Qué incluye:</b> el mantenimiento a gasolina lleva aceite y filtro de motor, filtro de combustible, bujías y bandas. El eléctrico no tiene esos elementos: revisa sistema de alto voltaje, refrigerante de batería, líquido de frenos, filtro de A/C, rotación y alineación. <b>Desgaste:</b> frenos, plumas, batería de 12 V, etc. Con freno regenerativo las pastillas duran mucho más. Valores referenciales: confirma el plan y los precios del concesionario.</p>
+    <div class="tscroll"><table id="tPM"></table></div>
+    <div class="obs" id="oP"></div><div class="concl" id="cP"></div>
+    <div class="ed" contenteditable="true" data-k="p1" data-ph="✏️ Tus notas sobre la proyección (precios del concesionario, plan de mantenimiento prepagado…)"></div>
+  </div>
+</section>
+</main>
+</div>
+
+<!-- ================= PESTAÑA CONCEPTOS ================= -->
+<div class="pane hide" id="pConc">
+<p class="intro">Cada concepto tiene una animación, la explicación técnica, un llamado de atención y una conclusión. Los cuadros ✏️ son tuyos: escribe ahí tus notas (se guardan en este navegador).</p>
+<div class="cgrid">
+
+ <div class="card"><h2>1. Energía (kWh) y potencia (kW)<span class="tag">Base</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 170">
+   <text x="20" y="20">Cargador lento 3,3 kW</text><text x="280" y="20">Cargador 11 kW</text>
+   <line x1="20" y1="60" x2="150" y2="60" stroke="#2f6fd6" stroke-width="4" class="flow slow"/>
+   <line x1="280" y1="60" x2="410" y2="60" stroke="#2f6fd6" stroke-width="12" class="flow fast"/>
+   <rect x="150" y="30" width="70" height="120" rx="8" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="2"/>
+   <rect x="410" y="30" width="70" height="120" rx="8" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="2"/>
+   <rect x="152" width="66" fill="#1f9d74" opacity=".8"><animate attributeName="height" values="0;116;116;0" keyTimes="0;.85;.95;1" dur="8s" repeatCount="indefinite"/><animate attributeName="y" values="148;32;32;148" keyTimes="0;.85;.95;1" dur="8s" repeatCount="indefinite"/></rect>
+   <rect x="412" width="66" fill="#1f9d74" opacity=".8"><animate attributeName="height" values="0;116;116;0" keyTimes="0;.28;.95;1" dur="8s" repeatCount="indefinite"/><animate attributeName="y" values="148;32;32;148" keyTimes="0;.28;.95;1" dur="8s" repeatCount="indefinite"/></rect>
+   <text x="160" y="165" class="mut">60 kWh</text><text x="420" y="165" class="mut">60 kWh</text>
+   <text x="20" y="90" class="mut">poca potencia</text><text x="280" y="90" class="mut">más potencia</text>
+   <text x="20" y="140" class="mut">≈ 18 h</text><text x="280" y="140" class="mut">≈ 5,5 h</text>
+  </svg></div>
+  <p><b>Qué es:</b> el <b>kWh</b> es energía (cuánto cabe en el «tanque»); el <b>kW</b> es potencia (qué tan rápido fluye esa energía).</p>
+  <p><b>Técnicamente:</b> 1 kWh es la energía de mantener 1 kW durante 1 hora. Por eso la batería se mide en kWh y el cargador en kW.</p>
+  <div class="formula">Energía (kWh) = Potencia (kW) × Tiempo (h) &nbsp;→&nbsp; Tiempo = kWh ÷ kW</div>
+  <div class="al warn">⚠️ <b>Ojo:</b> no confundas «un auto de 60 kW» (potencia del motor) con «una batería de 60 kWh» (capacidad). Son cosas distintas.</div>
+  <div class="concl"><b>Conclusión:</b> los dos tanques guardan lo mismo (60 kWh); el de 11 kW se llena en ~1/3 del tiempo. El kWh define cuánto pagas, el kW cuánto esperas.</div>
+  <div class="ed" contenteditable="true" data-k="c1" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>2. Estado de carga (SOC, %)<span class="tag">Batería</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 150">
+   <rect x="40" y="40" width="140" height="70" rx="10" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="3"/><rect x="180" y="62" width="10" height="26" rx="3" fill="currentColor" style="color:var(--muted)"/>
+   <rect x="46" y="46" height="58" rx="6" fill="#1f9d74"><animate attributeName="width" values="20;128;128;20" keyTimes="0;.55;.75;1" dur="7s" repeatCount="indefinite"/></rect>
+   <rect x="46" y="46" width="128" height="58" rx="6" fill="#c0392b" opacity=".12"/>
+   <line x1="72" y1="34" x2="72" y2="116" stroke="#c0392b" stroke-dasharray="3 3"/><text x="58" y="130" class="mut">20 %</text>
+   <line x1="148" y1="34" x2="148" y2="116" stroke="#c0392b" stroke-dasharray="3 3"/><text x="134" y="130" class="mut">80 %</text>
+   <text x="230" y="55">Rango diario recomendado: 20 % – 80 %</text>
+   <text x="230" y="80" class="mut">Bajo 20 %: reserva y más estrés químico</text>
+   <text x="230" y="100" class="mut">Sobre 80 %: carga más lenta (sobre todo DC)</text>
+  </svg></div>
+  <p><b>Qué es:</b> el porcentaje de energía disponible respecto de la capacidad útil. SOC = <i>State of Charge</i>.</p>
+  <p><b>Técnicamente:</b> el BMS (sistema de gestión de batería) estima el SOC midiendo voltaje, corriente y temperatura de las celdas. Los fabricantes dejan un margen oculto arriba y abajo: «0 %» no es la celda vacía y «100 %» no es la celda al límite.</p>
+  <div class="formula">Energía a cargar = Batería útil × (% objetivo − % actual) ÷ 100</div>
+  <div class="al warn">⚠️ <b>Ojo:</b> mantener la batería mucho tiempo al 100 % o al 0 % acelera la degradación. En baterías LFP (BYD Blade) el fabricante suele pedir cargar al 100 % una vez por semana para calibrar el BMS.</div>
+  <div class="concl"><b>Conclusión:</b> para el día a día, 20–80 % da la mejor relación entre autonomía, tiempo de carga y vida útil.</div>
+  <div class="ed" contenteditable="true" data-k="c2" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>3. Carga AC vs carga DC<span class="tag">Cargadores</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 210">
+   <text x="10" y="18" font-weight="700">AC (casa / poste)</text>
+   <g transform="translate(10,30)"><clipPath id="ck1"><rect width="90" height="40"/></clipPath><g clip-path="url(#ck1)"><path d="M0 20 q15 -18 30 0 t30 0 t30 0 t30 0 t30 0" fill="none" stroke="#d9822b" stroke-width="2.5" style="animation:sine 1.2s linear infinite"/></g></g>
+   <text x="10" y="86" class="mut">Red alterna</text>
+   <line x1="105" y1="50" x2="220" y2="50" stroke="#d9822b" stroke-width="5" class="flow"/>
+   <rect x="220" y="25" width="250" height="60" rx="10" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="2"/>
+   <text x="230" y="20" class="mut">Dentro del auto</text>
+   <rect x="232" y="35" width="96" height="40" rx="6" fill="#d9a400" opacity=".25"/><text x="240" y="60">OBC (AC→DC)</text>
+   <line x1="330" y1="55" x2="380" y2="55" stroke="#1f9d74" stroke-width="5" class="flow"/>
+   <rect x="380" y="35" width="80" height="40" rx="6" fill="#1f9d74" opacity=".25"/><text x="394" y="60">Batería</text>
+   <text x="10" y="128" font-weight="700">DC (electrolinera rápida)</text>
+   <rect x="10" y="140" width="110" height="50" rx="6" fill="#d9a400" opacity=".25"/><text x="18" y="170">Convertidor</text><text x="18" y="185" class="mut">fuera del auto</text>
+   <line x1="120" y1="165" x2="380" y2="165" stroke="#1f9d74" stroke-width="12" class="flow fast"/>
+   <rect x="220" y="135" width="250" height="60" rx="10" fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="2"/>
+   <rect x="380" y="145" width="80" height="40" rx="6" fill="#1f9d74" opacity=".25"/><text x="394" y="170">Batería</text>
+   <text x="230" y="205" class="mut">Salta el OBC: va directo a la batería</text>
+  </svg></div>
+  <p><b>Qué es:</b> la batería solo almacena corriente continua (DC). La red entrega corriente alterna (AC). Alguien tiene que convertirla.</p>
+  <p><b>Técnicamente:</b> en <b>AC</b> la conversión la hace el <b>cargador a bordo (OBC)</b> del auto, que es pequeño (6,6–11 kW). En <b>DC</b> el convertidor grande está en la electrolinera (30–350 kW) y entrega DC directo a la batería, saltándose el OBC.</p>
+  <div class="al warn">⚠️ <b>Ojo:</b> por eso un wallbox de 22 kW no acelera a un auto con OBC de 7 kW: el límite está dentro del auto. Revisa el dato «Máx. AC» de tu modelo.</div>
+  <div class="concl"><b>Conclusión:</b> AC = lento, barato y suave para la batería (uso diario). DC = rápido y caro (viajes).</div>
+  <div class="ed" contenteditable="true" data-k="c3" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>4. Potencia efectiva (cuello de botella)<span class="tag">Tiempo</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 140">
+   <rect x="20" y="40" width="120" height="60" rx="8" fill="#2f6fd6" opacity=".18"/><text x="30" y="65">Cargador</text><text x="30" y="85" class="mut">22 kW</text>
+   <path d="M140 52 H250 V62 H300 V88 H250 V88 H140 Z" fill="none"/>
+   <line x1="140" y1="70" x2="250" y2="70" stroke="#2f6fd6" stroke-width="30" class="flow" opacity=".7"/>
+   <line x1="250" y1="70" x2="390" y2="70" stroke="#1f9d74" stroke-width="10" class="flow"/>
+   <rect x="242" y="50" width="16" height="40" rx="3" fill="#c0392b" opacity=".85"/><text x="214" y="120" class="mut">límite del auto 7 kW</text>
+   <rect x="390" y="40" width="110" height="60" rx="8" fill="#1f9d74" opacity=".18"/><text x="402" y="65">Batería</text><text x="402" y="85" class="mut">recibe 7 kW</text>
+  </svg></div>
+  <p><b>Qué es:</b> la potencia que realmente entra al auto.</p>
+  <div class="formula">Potencia efectiva = mínimo(Potencia del cargador, Límite del auto AC o DC)</div>
+  <p><b>Técnicamente:</b> el auto y el cargador «negocian» la corriente por el cable de comunicación (piloto de control en AC, protocolo CCS en DC). Gana siempre el más bajo. Además, en DC el BMS reduce la corriente según temperatura y SOC.</p>
+  <div class="al warn">⚠️ <b>Ojo:</b> antes de vender o instalar un wallbox, revisa la potencia del OBC del cliente; un equipo sobredimensionado es inversión sin beneficio.</div>
+  <div class="concl"><b>Conclusión:</b> el tiempo de carga lo decide el eslabón más débil de la cadena, no el cargador más grande.</div>
+  <div class="ed" contenteditable="true" data-k="c4" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>5. Curva de carga rápida DC<span class="tag">Tiempo</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 200">
+   <line x1="50" y1="170" x2="500" y2="170" stroke="currentColor" style="color:var(--muted)"/><line x1="50" y1="20" x2="50" y2="170" stroke="currentColor" style="color:var(--muted)"/>
+   <text x="455" y="190" class="mut">SOC %</text><text x="4" y="16" class="mut">kW</text>
+   <text x="44" y="186" class="mut">0</text><text x="226" y="186" class="mut">40</text><text x="406" y="186" class="mut">80</text><text x="488" y="186" class="mut">100</text>
+   <rect x="410" y="20" width="90" height="150" fill="#c0392b" opacity=".08"/>
+   <path id="taper" d="M50 120 L80 40 L410 45 L440 95 L470 130 L500 150" fill="none" stroke="#1f9d74" stroke-width="3" stroke-dasharray="600" style="animation:draw 4s ease-out infinite"/>
+   <circle r="6" fill="#1f9d74"><animateMotion dur="4s" repeatCount="indefinite"><mpath href="#taper"/></animateMotion></circle>
+   <text x="160" y="35">meseta: potencia alta</text><text x="415" y="70" class="mut">caída</text>
+  </svg></div>
+  <p><b>Qué es:</b> en DC la potencia no es constante: sube rápido, se mantiene en una meseta y cae fuerte sobre ~80 %.</p>
+  <p><b>Técnicamente:</b> al llenarse, el voltaje de las celdas se acerca a su máximo y el BMS pasa de corriente constante (CC) a voltaje constante (CV), reduciendo la corriente para no dañar las celdas. La calculadora asume 85 % de la potencia pico hasta 80 % de SOC y una caída hasta 30 % al llegar a 100 %.</p>
+  <div class="al warn">⚠️ <b>Ojo:</b> el tramo de 80 % a 100 % puede tardar casi lo mismo que de 10 % a 80 %. En electrolinera pagas por kWh, pero ocupas el puesto el doble de tiempo.</div>
+  <div class="concl"><b>Conclusión:</b> en viaje, carga de 10–20 % hasta 80 % y sigue; es la forma más rápida de sumar kilómetros.</div>
+  <div class="ed" contenteditable="true" data-k="c5" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>6. Pérdidas de carga<span class="tag">Energía</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 150">
+   <rect x="20" y="50" width="120" height="50" rx="8" fill="#2f6fd6" opacity=".2"/><text x="30" y="72">Red</text><text x="30" y="90" class="mut">10 kWh pagados</text>
+   <line x1="140" y1="75" x2="370" y2="75" stroke="#1f9d74" stroke-width="22" class="flow" opacity=".75"/>
+   <path d="M210 64 Q230 40 250 20" stroke="#c0392b" stroke-width="5" fill="none" class="flow"/>
+   <g fill="#c0392b"><circle cx="240" cy="40" r="4" style="animation:heat 1.6s infinite"/><circle cx="255" cy="45" r="3" style="animation:heat 1.6s .5s infinite"/><circle cx="230" cy="48" r="3" style="animation:heat 1.6s 1s infinite"/></g>
+   <text x="262" y="24" class="mut">1,2 kWh en calor (OBC, cables, refrigeración)</text>
+   <rect x="370" y="50" width="130" height="50" rx="8" fill="#1f9d74" opacity=".2"/><text x="380" y="72">Batería</text><text x="380" y="90" class="mut">8,8 kWh útiles</text>
+  </svg></div>
+  <p><b>Qué es:</b> parte de la energía que compras se convierte en calor y nunca llega a la batería.</p>
+  <div class="formula">Energía de la red = Energía a la batería ÷ (1 − pérdidas)</div>
+  <p><b>Técnicamente:</b> se pierde en la conversión AC→DC del OBC, en el cableado, en la propia resistencia interna de la batería y en la bomba/ventilador que la enfría. En AC con baja potencia (toma de 220 V) las pérdidas son proporcionalmente mayores porque los sistemas auxiliares del auto funcionan más horas.</p>
+  <div class="al warn">⚠️ <b>Ojo:</b> el medidor de la casa marca la energía de la red, no la de la batería. Si comparas tu planilla con lo que dice el auto, verás 10–15 % de diferencia: es normal.</div>
+  <div class="concl"><b>Conclusión:</b> por cada 100 kWh que entran a la batería, en casa pagas ~112–115 kWh.</div>
+  <div class="ed" contenteditable="true" data-k="c6" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>7. Tarifa horaria (valle, media, punta)<span class="tag">Costo</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 210">
+   <g transform="translate(110,105)">
+    <!-- 24 h: 0h arriba; 1h = 15° -->
+    <circle r="80" fill="none" stroke="#2e8b57" stroke-width="22" stroke-dasharray="209.4 293.2" transform="rotate(240)" pathLength="502.65"/>
+    <circle r="80" fill="none" stroke="#d9a400" stroke-width="22" stroke-dasharray="209.4 293.2" transform="rotate(30)" pathLength="502.65"/>
+    <circle r="80" fill="none" stroke="#c0392b" stroke-width="22" stroke-dasharray="83.8 418.9" transform="rotate(180)" pathLength="502.65"/>
+    <g style="transform-origin:0 0;animation:spin 12s linear infinite"><line x1="0" y1="0" x2="0" y2="-66" stroke="currentColor" style="color:var(--ink)" stroke-width="3"/><circle r="5" fill="currentColor" style="color:var(--ink)"/></g>
+    <text x="-8" y="-94" class="mut">0 h</text><text x="94" y="4" class="mut">6</text><text x="-6" y="106" class="mut">12</text><text x="-112" y="4" class="mut">18</text>
+   </g>
+   <circle cx="250" cy="60" r="7" fill="#2e8b57"/><text x="264" y="64">Valle 22:00–08:00 → USD 0,05</text>
+   <circle cx="250" cy="95" r="7" fill="#d9a400"/><text x="264" y="99">Media 08:00–18:00 → USD 0,08</text>
+   <circle cx="250" cy="130" r="7" fill="#c0392b"/><text x="264" y="134">Punta 18:00–22:00 → USD 0,10</text>
+   <text x="250" y="170" class="mut">Valores referenciales por kWh, días laborables</text>
+  </svg></div>
+  <p><b>Qué es:</b> la tarifa para VE cobra distinto según la hora, para que la carga se haga cuando el sistema eléctrico tiene menos demanda.</p>
+  <p><b>Técnicamente:</b> requiere un medidor que registre por franja horaria. La calculadora avanza la carga minuto a minuto desde la hora de inicio y asigna cada kWh a su franja.</p>
+  <div class="formula">Costo = Σ (kWh en cada franja × precio de esa franja)</div>
+  <div class="al warn">⚠️ <b>Ojo:</b> sin solicitar la tarifa VE a la distribuidora (EEQ en Quito, CNEL en la Costa) se cobra la tarifa residencial normal por bloques, sin descuento nocturno.</div>
+  <div class="concl"><b>Conclusión:</b> empezar a las 22:00 cuesta la mitad que cargar en hora punta. La programación horaria del auto o del wallbox es el ahorro más fácil.</div>
+  <div class="ed" contenteditable="true" data-k="c7" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>8. Autonomía declarada vs real<span class="tag">Km</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 170">
+   <g font-size="12">
+    <text x="10" y="35">CLTC (China)</text><rect x="120" y="22" width="380" height="18" rx="4" fill="#2f6fd6" opacity=".35" style="transform-origin:120px 0;animation:bar 5s ease-out infinite"/><text x="470" y="35" class="mut">100 %</text>
+    <text x="10" y="70">NEDC</text><rect x="120" y="57" width="355" height="18" rx="4" fill="#2f6fd6" opacity=".5" style="transform-origin:120px 0;animation:bar 5s .2s ease-out infinite"/><text x="445" y="70" class="mut">~93 %</text>
+    <text x="10" y="105">WLTP</text><rect x="120" y="92" width="310" height="18" rx="4" fill="#2f6fd6" opacity=".7" style="transform-origin:120px 0;animation:bar 5s .4s ease-out infinite"/><text x="400" y="105" class="mut">~82 %</text>
+    <text x="10" y="140">Real en Quito</text><rect x="120" y="127" width="285" height="18" rx="4" fill="#1f9d74" style="transform-origin:120px 0;animation:bar 5s .6s ease-out infinite"/><text x="375" y="140" class="mut">~75–85 %</text>
+   </g>
+  </svg></div>
+  <p><b>Qué es:</b> la autonomía oficial sale de un ciclo de prueba en laboratorio; la real depende de cómo y dónde manejas.</p>
+  <p><b>Técnicamente:</b> los ciclos CLTC y NEDC son suaves (velocidades bajas, sin aire acondicionado); WLTP es más exigente. En Quito influyen las pendientes, la altura (menos resistencia del aire, pero más subidas), el tráfico y el uso de climatización. A favor: en bajada el freno regenerativo recupera energía. Las barras son proporciones típicas referenciales.</p>
+  <div class="al warn">⚠️ <b>Ojo:</b> al comparar modelos, verifica con qué ciclo se publicó la autonomía. 400 km CLTC no equivalen a 400 km WLTP.</div>
+  <div class="concl"><b>Conclusión:</b> usa 80–90 % del dato oficial para planificar, y mídelo en tu propio uso.</div>
+  <div class="ed" contenteditable="true" data-k="c8" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>9. Consumo (kWh/100 km) y costo por km<span class="tag">Costo</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 120">
+   <line x1="20" y1="80" x2="500" y2="80" stroke="currentColor" style="color:var(--line)" stroke-width="18"/>
+   <line x1="20" y1="80" x2="500" y2="80" stroke="currentColor" style="color:var(--card)" stroke-width="2" stroke-dasharray="12 10" class="flow slow"/>
+   <g><animateTransform attributeName="transform" type="translate" from="0 0" to="420 0" dur="6s" repeatCount="indefinite"/>
+    <rect x="20" y="52" width="56" height="18" rx="6" fill="#1f9d74"/><rect x="32" y="42" width="30" height="14" rx="5" fill="#1f9d74"/><circle cx="34" cy="72" r="6" fill="currentColor" style="color:var(--ink)"/><circle cx="64" cy="72" r="6" fill="currentColor" style="color:var(--ink)"/></g>
+   <text x="20" y="25">16 kWh cada 100 km × USD 0,05 = USD 0,80 cada 100 km</text><text x="20" y="112" class="mut">= 0,8 centavos por km en casa, horario valle</text>
+  </svg></div>
+  <div class="formula">Consumo = kWh de la red ÷ km ganados × 100<br>Costo por km = Costo de la carga ÷ km ganados</div>
+  <p><b>Técnicamente:</b> el consumo es la «eficiencia» del auto, equivalente a los L/100 km en gasolina. Un VE compacto eficiente consume 14–18 kWh/100 km medido en la red; un SUV grande 20–25.</p>
+  <div class="al warn">⚠️ <b>Ojo:</b> si la calculadora te da un consumo fuera de 12–22 kWh/100 km, revisa la batería o la autonomía real ingresadas.</div>
+  <div class="concl"><b>Conclusión:</b> el costo por km combina eficiencia del auto y precio del kWh; es el mejor número para comparar contra gasolina.</div>
+  <div class="ed" contenteditable="true" data-k="c9" data-ph="✏️ Tus notas…"></div></div>
+
+ <div class="card"><h2>10. Equivalencia con gasolina<span class="tag">Comparación</span></h2>
+  <div class="anim"><svg viewBox="0 0 520 180">
+   <text x="20" y="22" font-weight="700">De 100 unidades de energía, ¿cuánto mueve las ruedas?</text>
+   <text x="20" y="62">Motor a gasolina</text>
+   <rect x="160" y="48" width="340" height="22" rx="4" fill="currentColor" style="color:var(--line)"/>
+   <rect x="160" y="48" width="95" height="22" rx="4" fill="#d9822b" style="transform-origin:160px 0;animation:bar 5s ease-out infinite"/><text x="262" y="64" class="mut">~25–30 % · resto en calor del motor y escape</text>
+   <text x="20" y="112">Motor eléctrico</text>
+   <rect x="160" y="98" width="340" height="22" rx="4" fill="currentColor" style="color:var(--line)"/>
+   <rect x="160" y="98" width="290" height="22" rx="4" fill="#1f9d74" style="transform-origin:160px 0;animation:bar 5s .3s ease-out infinite"/><text x="400" y="114" style="fill:var(--card)" font-size="12">~85 %</text>
+   <text x="20" y="160" class="mut">1 galón = 3,785 L ≈ 33,7 kWh de energía química, pero solo ~9 kWh llegan a las ruedas</text>
+  </svg></div>
+  <div class="formula">Galones gastados = km ÷ rendimiento (km/galón)<br>Costo gasolina = galones × precio por galón</div>
+  <p><b>Técnicamente:</b> el motor de combustión pierde la mayor parte de la energía como calor (radiador, escape, fricción) y además gasta combustible en ralentí. El motor eléctrico es mucho más eficiente y no consume detenido en el tráfico.</p>
+  <div class="al warn">⚠️ <b>Ojo:</b> la comparación es tan buena como el rendimiento que ingreses. Usa el km/galón real del auto que reemplazarías, no el de catálogo.</div>
+  <div class="concl"><b>Conclusión:</b> por la diferencia de eficiencia y el precio del kWh subsidiado, el VE cargado en casa suele costar entre 5 y 10 veces menos por km que la gasolina Extra.</div>
+  <div class="ed" contenteditable="true" data-k="c10" data-ph="✏️ Tus notas…"></div></div>
+
+</div>
+</div>
+<!-- ================= PESTAÑA BENEFICIOS KIA ================= -->
+<div class="pane hide" id="pKia">
+<div class="bwrap">
+ <div class="hero">
+  <h2><span class="kbadge">KIA</span> ¿Por qué elegir un eléctrico Kia en Ecuador?</h2>
+  <p>Garantía, red de carga, tecnología y respaldo comparados con las marcas que más eléctricos venden en el país. Datos públicos a octubre de 2026.</p>
+  <div class="stats">
+   <div><b>16 %</b><span>del mercado de autos nuevos en Ecuador (1.er semestre 2026, Aeade)</span></div>
+   <div><b>8</b><span>modelos 100 % eléctricos en el portafolio Kia Ecuador</span></div>
+   <div><b>+20 / +250</b><span>electrolineras ultrarrápidas / puntos de carga intermedia, sin costo para clientes Kia</span></div>
+   <div><b>10 años</b><span>garantía hasta 10 años o 160.000 km (según componente)</span></div>
+   <div><b>8 años</b><span>batería de alto voltaje: 8 años o 160.000 km</span></div>
+   <div><b>3 años</b><span>asistencia en ruta 24/7 sin límite de kilometraje</span></div>
+  </div>
+ </div>
+
+ <div class="card"><h2>🛡️ Garantía y respaldo frente a otras marcas</h2>
+  <div class="tscroll"><table class="cmpt">
+   <tr><th>Marca</th><th>Batería de alto voltaje</th><th>Garantía del vehículo / motor eléctrico</th><th>Red de carga propia en Ecuador</th><th>Asistencia en ruta</th></tr>
+   <tr class="k"><td>Kia</td><td>8 años o 160.000 km</td><td>Hasta 10 años o 160.000 km</td><td>+20 electrolineras ultrarrápidas y +250 puntos intermedios, sin costo para clientes</td><td>24/7, 3 años, km ilimitado</td></tr>
+   <tr><td>BYD</td><td>8 años o 150.000 km, condicionada a salud de batería (SOH) ≥ 60 %</td><td>Motor y control eléctrico: 6 años o 150.000 km</td><td>Estación de carga rápida en Samanes (Guayaquil, 21 cargadores) y cargadores en Loja</td><td>No publicada en la fuente consultada</td></tr>
+   <tr><td>Chevrolet</td><td>8 años o 160.000 km (Spark EUV, Captiva EV)</td><td>No publicada en la fuente consultada</td><td>17 puntos en concesionarios (plan anunciado: 33)</td><td>No publicada en la fuente consultada</td></tr>
+   <tr><td>Geely · JAC · GAC · Dongfeng</td><td colspan="4">No encontramos términos de garantía publicados para Ecuador en sus páginas o en prensa. ✏️ Completa con la ficha del concesionario antes de comparar con un cliente.</td></tr>
+  </table></div>
+  <div class="obs"><h3>Observaciones</h3>
+   <div class="al ok">🟢 <b>Kia iguala o supera la cobertura de batería</b> de las marcas que la publican: 160.000 km frente a 150.000 km de BYD. La garantía de BYD exige además que la batería conserve al menos 60 % de salud (SOH); confirma la condición equivalente en la póliza Kia.</div>
+   <div class="al ok">🟢 <b>Kia es la única marca de la tabla con garantía de vehículo de hasta 10 años publicada</b>, junto con asistencia en ruta de 3 años sin límite de kilometraje.</div>
+   <div class="al warn">🟡 <b>Antes de usarlo en una cotización:</b> confirma las condiciones de cada garantía (qué cubre, mantenimientos obligatorios, uso comercial). Los datos de la competencia vienen de sus páginas o de prensa y pueden cambiar.</div>
+  </div>
+  <div class="concl"><b>Conclusión:</b> en respaldo, el argumento más fuerte de Kia no es un solo número sino la combinación de garantía larga de vehículo, batería a 160.000 km, asistencia de 3 años y una red de carga gratuita para el cliente.</div>
+  <div class="ed" contenteditable="true" data-k="b1" data-ph="✏️ Agrega datos de tu concesionario: talleres, técnicos certificados en alto voltaje, stock de repuestos…"></div>
+ </div>
+
+ <div class="bgrid">
+  <div class="card"><h2>⚡ Red de carga sin costo</h2>
+   <p>Kia Ecuador reporta más de 20 electrolineras de carga ultrarrápida y más de 250 puntos de carga intermedia en Costa, Sierra y Oriente, construidos en los últimos 12 años y <b>sin costo para clientes Kia</b>.</p>
+   <div class="al info">ℹ️ En la <b>Calculadora KIA</b>, elige «Electrolinera» y la opción <b>Red Kia</b>: el costo de esa carga queda en USD 0. Así el cliente ve el ahorro real.</div>
+   <div class="concl"><b>Conclusión:</b> con la red Kia, un viaje largo puede costar cero en energía, frente a USD 0,25–0,285/kWh en electrolineras comerciales.</div>
+  </div>
+  <div class="card"><h2>🔋 Tecnología de carga de 800 V</h2>
+   <p>EV6 y EV9 usan la plataforma E-GMP de 800 V: <b>10–80 % en 18 min (EV6)</b> y <b>24 min (EV9)</b> según Kia Ecuador. Como referencia, el Chevrolet Spark EUV admite hasta 50 kW y tarda 35 min de 30 a 80 %.</p>
+   <div class="al warn">🟡 EV2, EV3, EV4 y EV5 trabajan a 400 V: cargan rápido, pero no al nivel de EV6 y EV9. Explícalo al cliente que viaja mucho.</div>
+   <div class="concl"><b>Conclusión:</b> en carretera, menos minutos conectado es el beneficio que el cliente más nota.</div>
+  </div>
+  <div class="card"><h2>🔌 V2L: el auto como fuente de energía</h2>
+   <p>Kia EV3, EV5 y EV6 incluyen V2L (<i>Vehicle to Load</i>): tomas de 220 V que alimentan equipos desde la batería del auto. Útil en cortes de luz, campo o trabajo.</p>
+   <div class="al info">ℹ️ Con los racionamientos eléctricos que ha vivido Ecuador, este es un argumento práctico y muy concreto.</div>
+   <div class="concl"><b>Conclusión:</b> el auto no solo consume energía; también puede respaldar el hogar o un negocio pequeño por unas horas.</div>
+  </div>
+  <div class="card"><h2>🏢 Respaldo de marca y distribuidor</h2>
+   <p>Kia vendió 12.512 unidades en el primer semestre de 2026 (+38 %), con 16 % del mercado. La Corporación Empresarial Eljuri, su distribuidor, recibió en 2026 el premio <i>Best Global Partner</i> de Kia.</p>
+   <div class="al info">ℹ️ Volumen alto = más talleres, más técnicos formados y más repuestos en el país, lo que reduce los tiempos de reparación.</div>
+   <div class="concl"><b>Conclusión:</b> comprar a la marca líder protege el valor de reventa y la disponibilidad de postventa.</div>
+  </div>
+ </div>
+
+ <div class="card" style="margin-top:16px"><h2>🚘 Portafolio eléctrico Kia Ecuador</h2>
+  <p class="src">Toca un modelo para abrirlo en la Calculadora KIA con su ficha cargada.</p>
+  <div class="mods" id="mods"></div>
+ </div>
+
+ <div class="card"><h2>🗣️ Cómo presentar estos beneficios al cliente</h2>
+  <ol style="margin:6px 0 0 18px;padding:0">
+   <li><b>Empieza por su recorrido:</b> pregunta cuántos km hace al mes y llévalo a la Calculadora KIA.</li>
+   <li><b>Muestra el ahorro con su propio dato</b> en el gráfico de recorrido (galones vs kWh).</li>
+   <li><b>Cierra con el respaldo:</b> garantía de batería a 160.000 km, asistencia 3 años y red de carga sin costo.</li>
+   <li><b>Imprime el reporte</b> con el botón 🖨️ y entrégalo como respaldo de la conversación.</li>
+  </ol>
+  <div class="ed" contenteditable="true" data-k="b2" data-ph="✏️ Tus argumentos o preguntas frecuentes de clientes…"></div>
+ </div>
+
+ <p class="src">Fuentes: <a href="https://www.kia.com/ec/owners/kia-warranty.html">Garantía Kia Ecuador</a> · <a href="https://www.kia.com/ec/">kia.com/ec y fichas técnicas 2026</a> · <a href="https://eluniverso.com/noticias/economia/kia-venta-vehiculos-ecuador-nuevos-modelos-2026-nota/">El Universo, jul-2026 (ventas y red de carga)</a> · <a href="https://www.byd.com/ec/service-maintenance/warranty-policy.html">Política de garantía BYD Ecuador</a> · <a href="https://ecuador.patiotuerca.com/blog/chevrolet-spark-euv-un-nuevo-icono-urbano-con-alma-electrica/">Patiotuerca: Spark EUV</a> · <a href="https://ecuador.patiotuerca.com/blog/chevrolet-captiva-ev-la-suv-electrica-que-amplia-las-opciones-de-movilidad-en-ecuador/">Patiotuerca: Captiva EV</a> · <a href="https://www.primicias.ec/economia/empresas/taxis-quito-carros-electricos-energia-mercado-automotor-110784/">Primicias: carga BYD</a>. Datos a octubre de 2026; verificar antes de cotizar.</p>
+</div>
+</div>
+
+<footer><div class="foot-brand"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" class="lg-bg"/><path d="M12 44 A20 20 0 0 1 52 44" class="lg-trk"/><path d="M12 44 A20 20 0 0 1 46.1 29.9" class="lg-arc"/><g class="lg-tk"><line x1="12" y1="44" x2="16" y2="44"/><line x1="17.9" y1="29.9" x2="20.7" y2="32.7"/><line x1="32" y1="24" x2="32" y2="28"/><line x1="46.1" y1="29.9" x2="43.3" y2="32.7"/><line x1="52" y1="44" x2="48" y2="44"/></g><path d="M34.5 27 L26 40 H31.5 L28.5 51 L38.5 35.5 H33 Z" class="lg-bolt"/></svg><div><b>Calculadora desarrollada por MF Motor Insight</b><br>Herramienta referencial. Las fichas técnicas pueden variar por versión y las tarifas deben confirmarse con la distribuidora o el operador de la electrolinera. © 2026 MF Motor Insight.</div></div></footer>
+
+<div id="rep"></div>
+<script>
+// [marca, modelo, kWh, km declarados, AC kW, DC kW, ventas ene–sep 2026 (Aeade)]
+const M=[
+["BYD","Yuan Pro",45.1,380,7,60,2003],["BYD","Seagull (todas las versiones)",30.1,305,6.6,30,930],["BYD","Seagull 400 km",38.9,405,6.6,40,0],["BYD","Dolphin",44.9,405,7,60,0],
+["BYD","Yuan Plus",60.5,480,7,88,0],["BYD","Seal",82.5,520,11,150,0],["BYD","Sealion 7",82.5,456,11,150,0],
+["Chevrolet","Spark EUV",42,330,6.6,70,869],["Chevrolet","Captiva EV",60,415,6.6,80,315],["Chevrolet","Bolt EUV",65,397,11,55,0],["Chevrolet","Equinox EV",85,513,11.5,150,0],
+["Kia","EV2",42.2,450,11,115,479],["Kia","EV5 64 kWh",64.2,500,11,100,405],["Kia","EV3 58 kWh",58.3,410,11,101,0],["Kia","EV3 81 kWh",81.4,600,11,128,0],["Kia","EV4 58 kWh",58.3,456,11,101,0],["Kia","EV4 81 kWh",81.4,633,11,128,0],["Kia","Niro EV",64.8,460,11,85,0],["Kia","EV6",84,528,11,235,0],["Kia","EV9",99.8,505,11,210,0],
+["Geely","EX2",40.2,410,6.6,70,444],["Geely","EX5",60.2,495,11,100,225],
+["JAC","E30X",41,405,6.6,60,379],["JAC","E10X",31.4,302,6.6,40,0],
+["GAC","Aion UT",44.1,420,6.6,80,334],["GAC","Aion ES",55.2,442,6.6,80,0],["GAC","Aion V",75.3,520,11,180,0],
+["Dongfeng","Vigo",42.3,430,6.6,70,300],["Dongfeng","Mage EV",50.82,445,6.6,80,0],["Dongfeng","Nammi",31.5,330,6.6,50,0],
+["Hyundai","Kona Eléctrico",64.8,514,11,100,0],["Hyundai","Ioniq 5",77.4,507,11,230,0],
+["Chery","EQ7",67,500,11,100,0],["Deepal","S05 EV",56.1,465,6.6,90,0]];
+const $=i=>document.getElementById(i),sel=$("modelo");
+const idx=M.map((m,i)=>[m,i]),pos={};
+idx.filter(x=>x[0][6]>0).sort((a,b)=>b[0][6]-a[0][6]).forEach((x,n)=>pos[x[1]]=n+1);
+const marcas={};idx.forEach(x=>{(marcas[x[0][0]]=marcas[x[0][0]]||[]).push(x)});
+const tot=k=>marcas[k].reduce((a,x)=>a+x[0][6],0);
+Object.keys(marcas).sort((a,b)=>tot(b)-tot(a)||a.localeCompare(b)).forEach(k=>{
+ const og=document.createElement("optgroup");
+ og.label=k+(tot(k)>0?` — ${tot(k).toLocaleString("es-EC")} uds en el top 11 de ventas`:"");
+ marcas[k].sort((a,b)=>b[0][6]-a[0][6]||a[0][2]-b[0][2]).forEach(([m,i])=>{
+  const o=document.createElement("option");o.value=i;
+  o.textContent=`${m[1]} — ${m[2]} kWh`+(m[6]>0?` · #${pos[i]} en ventas (${m[6].toLocaleString("es-EC")} uds)`:"");
+  og.appendChild(o)});
+ sel.appendChild(og)});
+const og=document.createElement("optgroup");og.label="Otro";og.innerHTML='<option value="c">Otro modelo (ingresar datos)</option>';sel.appendChild(og);sel.value=0;
+function carga(){if(sel.value==="c")return;if(sel.value.startsWith("k")){const k=K[+sel.value.slice(1)];$("bat").value=k[2];$("auto").value=k[3];$("acmax").value=k[5];$("dcmax").value=k[6];$("real").value=Math.round(k[10]*100);if(typeof fichaKia==="function")fichaKia();return}const m=M[+sel.value];$("bat").value=m[2];$("auto").value=m[3];$("acmax").value=m[4];$("dcmax").value=m[5]}carga();
+let lugar="casa",tipo="DC";
+const KC=[["Toma 220 V",3.3],["Wallbox 7,4",7.4],["Wallbox 11",11],["Wallbox 22",22]],KD=[["DC 30",30],["DC 50",50],["DC 60",60],["DC 120",120],["DC 180",180]],KA=[["AC 7,4",7.4],["AC 11",11],["AC 22",22]];
+const chips=()=>{$("chipsKw").innerHTML=(lugar==="casa"?KC:tipo==="DC"?KD:KA).map(c=>`<button data-kw="${c[1]}">${c[0]}</button>`).join("")};
+function segs(id,cb){$(id).querySelectorAll("button").forEach(b=>b.onclick=()=>{$(id).querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset.v)})}
+segs("lugar",v=>{lugar=v;$("boxCasa").classList.toggle("hide",v!=="casa");$("boxEl").classList.toggle("hide",v!=="electro");$("boxTipo").classList.toggle("hide",v!=="electro");
+ if(v==="casa"){$("kw").value=7.4;$("perd").value=12}else{$("kw").value=tipo==="DC"?60:22;$("perd").value=tipo==="DC"?7:12}chips();calc()});
+segs("tipo",v=>{tipo=v;$("kw").value=v==="DC"?60:22;$("perd").value=v==="DC"?7:12;chips();calc()});
+$("chipsKw").onclick=e=>{if(e.target.dataset.kw){$("kw").value=e.target.dataset.kw;calc()}};
+document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{$("soc1").value=b.dataset.t;calc()});
+sel.onchange=()=>{carga();calc()};
+$("tmodo").onchange=()=>{const v=$("tmodo").value==="ve";$("boxVE").classList.toggle("hide",!v);$("boxGen").classList.toggle("hide",v);calc()};
+$("gtipo").onchange=()=>{$("gp").value=$("gtipo").value;calc()};
+document.querySelectorAll("input:not(#kmS)").forEach(i=>i.addEventListener("input",calc));chips();
+$("tn").onclick=()=>{const h=document.body.classList.toggle("nonotes");$("tn").textContent=h?"📝 Mostrar notas":"📝 Ocultar notas"};
+$("theme").onclick=()=>{const r=document.documentElement;const d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme: dark)").matches);r.dataset.theme=d?"light":"dark"};
+
+const usd=v=>"$ "+v.toFixed(2);
+const fh=h=>{const t=Math.round(h*60),a=Math.floor(t/60),b=t%60;return a>0?`${a} h ${String(b).padStart(2,"0")} min`:`${b} min`};
+const hm=m=>{m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(Math.floor(m%60)).padStart(2,"0")};
+const fra=m=>{const h=m/60;return h>=22||h<8?"valle":h<18?"media":"punta"};
+const NM={valle:"Valle 22–08 h",media:"Media 08–18 h",punta:"Punta 18–22 h"};
+const al=(c,t)=>`<div class="al ${c}">${t}</div>`;
+const ob=(arr)=>arr.length?`<h3>Observaciones</h3>`+arr.join(""):"";
+
+let R=null;
+function calc(){
+ R=null;
+ const bat=+$("bat").value,auto=+$("auto").value,acmax=+$("acmax").value,dcmax=+$("dcmax").value,kw=+$("kw").value;
+ let s0=+$("soc0").value,s1=+$("soc1").value;const perd=Math.min(Math.max(+$("perd").value,0),30)/100,real=+$("real").value/100;
+ if(!(bat>0&&auto>0&&kw>0)){$("glob").innerHTML=al("bad","⚠️ Completa batería, autonomía y potencia del cargador.");return}
+ if(s1<=s0){$("glob").innerHTML=al("bad","⚠️ El % objetivo debe ser mayor que el % actual.");return}
+ s0=Math.max(0,s0);s1=Math.min(100,s1);const gl=[];
+ const dc=lugar==="electro"&&tipo==="DC",lim=dc?dcmax:acmax;
+ if(dc&&!(dcmax>0))gl.push(al("bad","🚫 Este vehículo no tiene carga rápida DC registrada. Usa un cargador AC."));
+ const pEf=Math.min(kw,lim>0?lim:kw);
+ const t0=(()=>{const [h,m]=($("hora").value||"22:00").split(":").map(Number);return h*60+m})();
+ let tm=0,eR=0;const pf={valle:0,media:0,punta:0},mf={valle:0,media:0,punta:0};
+ for(let s=s0;s<s1-1e-9;s+=0.25){const ds=Math.min(0.25,s1-s),eG=bat*ds/100/(1-perd);
+  const f=dc?(s<80?0.85:Math.max(0.3,0.85-(s-80)*0.0275)):(s<95?1:0.6);
+  const dt=eG/(pEf*f)*60,fr=fra((t0+tm+dt/2)%1440);pf[fr]+=eG;mf[fr]+=dt;tm+=dt;eR+=eG}
+ const eB=bat*(s1-s0)/100,eP=eR-eB,hrs=tm/60;
+ const tV=+$("tV").value,tM=+$("tM").value,tP=+$("tP").value,modoVE=lugar==="casa"&&$("tmodo").value==="ve";
+ let costo=0,fil=[];
+ if(lugar==="casa"){if(modoVE){const T={valle:tV,media:tM,punta:tP};["valle","media","punta"].forEach(k=>{if(pf[k]>1e-4){const c=pf[k]*T[k];costo+=c;fil.push([NM[k],pf[k],T[k],c])}})}
+  else{const t=+$("tG").value;costo=eR*t;fil.push(["Tarifa general",eR,t,costo])}}
+ else{const t=+$("tE").value,f=+$("fijo").value||0;costo=eR*t+f;fil.push(["Energía",eR,t,eR*t]);if(f>0)fil.push(["Cargo fijo","—","—",f])}
+ const tp=costo/eR,kmG=auto*real*(s1-s0)/100,ckm=costo/kmG,k100=eR/kmG*100;
+ const gp=+$("gp").value,kg=+$("kmgal").value,cg=kg>0?kmG/kg*gp:0,ah=cg-costo,kmm=+$("kmmes").value||0;
+ const cargasMes=kmm/kmG,cMesE=kmm*ckm,cMesG=kg>0?kmm/kg*gp:0;
+
+ $("kC").textContent=usd(costo);$("kE").textContent=eR.toFixed(1)+" kWh";$("kT").textContent=fh(hrs);$("kK").textContent="$ "+ckm.toFixed(3);
+ $("glob").innerHTML=gl.join("");
+
+ // Energía
+ $("tE2").innerHTML=`<tr><th>Concepto</th><th class="r">Valor</th></tr><tr><td>A la batería (${s1-s0}% de ${bat} kWh)</td><td class="r">${eB.toFixed(2)} kWh</td></tr><tr><td>Pérdidas (${(perd*100).toFixed(1)} %)</td><td class="r">${eP.toFixed(2)} kWh</td></tr><tr><td><b>Desde la red (lo que pagas)</b></td><td class="r"><b>${eR.toFixed(2)} kWh</b></td></tr>`;
+ const oE=[];
+ if(s0<10)oE.push(al("warn","🟡 Partes de menos de 10 %: llegar tan bajo es riesgoso en ruta y exige más a la batería. Intenta cargar desde 15–20 %."));
+ if(s1>=100)oE.push(al("warn","🟡 Cargar al 100 % de forma habitual acelera el desgaste. Resérvalo para viajes largos; a diario 80–90 % es suficiente."));
+ else if(s1<=80&&s0>=10)oE.push(al("ok","🟢 Tu rango de carga está dentro de lo recomendado para cuidar la batería."));
+ if(perd>0.15)oE.push(al("warn",`🟡 Pérdidas de ${(perd*100).toFixed(0)} %: es más alto de lo normal (5–15 %). Revisa si el dato es correcto; cada punto extra se paga en la planilla.`));
+ $("oE").innerHTML=ob(oE);
+ $("cE").innerHTML=`<b>Conclusión:</b> subir ${s1-s0} puntos de batería exige comprar ${eR.toFixed(1)} kWh; ${eP.toFixed(1)} kWh (${(eP/eR*100).toFixed(0)} %) se pierden como calor y no llegan a la batería.`;
+
+ // Tiempo
+ const fin=hm(t0+tm);
+ $("tT").innerHTML=`<tr><th>Concepto</th><th class="r">Valor</th></tr><tr><td>Cargador</td><td class="r">${kw} kW ${dc?"DC":"AC"}</td></tr><tr><td>Límite del auto</td><td class="r">${lim>0?lim+" kW":"—"}</td></tr><tr><td><b>Potencia efectiva</b></td><td class="r"><b>${pEf.toFixed(1)} kW</b></td></tr><tr><td>Tiempo estimado</td><td class="r">${fh(hrs)}</td></tr>${lugar==="casa"?`<tr><td>Inicio → fin</td><td class="r">${$("hora").value} → ${fin}${t0+tm>=1440?" (día sig.)":""}</td></tr>`:""}`;
+ const oT=[];
+ if(lim>0&&kw>lim)oT.push(al("warn",`🟡 El cargador entrega ${kw} kW pero el auto solo acepta ${lim} kW: pagar un cargador más potente no acelera nada.`));
+ else if(lim>0&&kw<lim*0.5)oT.push(al("info",`ℹ️ El cargador usa menos de la mitad de lo que el auto aceptaría (${lim} kW). Un equipo más potente reduciría el tiempo.`));
+ if(dc&&s1>80)oT.push(al("warn","🟡 Sobre 80 % la carga rápida se frena mucho. Cortar en 80 % ahorra tiempo y dinero."));
+ if(lugar==="casa"&&kw<=3.5)oT.push(al("info","ℹ️ Con toma común de 220 V la carga es lenta; verifica que el circuito sea exclusivo y de calibre adecuado."));
+ if(lugar==="casa"&&hrs>10)oT.push(al("bad","🔴 No alcanza en una noche típica (10 h). Considera un wallbox de mayor potencia o cargas parciales más frecuentes."));
+ $("oT").innerHTML=ob(oT);
+ $("cT").innerHTML=`<b>Conclusión:</b> con ${pEf.toFixed(1)} kW efectivos la carga tarda ≈ ${fh(hrs)}. ${hrs>10?"Es una carga demasiado larga para una sola noche.":hrs>1?"Cabe bien en una noche o en una parada larga.":"Es una parada corta."}`;
+
+ // Costo
+ let fr="";if(modoVE){const c={valle:"var(--valle)",media:"var(--media)",punta:"var(--punta)"};
+  fr=`<div class="fr">${["valle","media","punta"].map(k=>`<span style="width:${pf[k]/eR*100}%;background:${c[k]}"></span>`).join("")}</div><div class="leg">${["valle","media","punta"].map(k=>`<span><i class="dot" style="background:${c[k]}"></i>${NM[k]}: ${(pf[k]/eR*100).toFixed(0)} %</span>`).join("")}</div>`}
+ $("fr").innerHTML=fr;
+ $("tC").innerHTML=`<tr><th>Concepto</th><th class="r">kWh</th><th class="r">USD/kWh</th><th class="r">Subtotal</th></tr>`+fil.map(r=>`<tr><td>${r[0]}</td><td class="r">${typeof r[1]==="number"?r[1].toFixed(2):r[1]}</td><td class="r">${typeof r[2]==="number"?r[2].toFixed(3):r[2]}</td><td class="r">${usd(r[3])}</td></tr>`).join("")+`<tr><td><b>Total</b></td><td class="r"><b>${eR.toFixed(2)}</b></td><td class="r">${tp.toFixed(3)} prom.</td><td class="r"><b>${usd(costo)}</b></td></tr>`;
+ const oC=[];
+ if(modoVE){if(pf.punta>0.01)oC.push(al("bad",`🔴 Parte de la carga cae en hora punta (18–22 h). Empezando a las 22:00 pagarías ≈ ${usd(eR*tV)} en lugar de ${usd(costo)}.`));
+  else if(pf.media>0.01)oC.push(al("warn",`🟡 Parte de la carga cae entre 08 y 18 h. Si termina antes de las 08:00 pagarías ≈ ${usd(eR*tV)}.`));
+  else oC.push(al("ok","🟢 Toda la carga ocurre en horario valle: es el costo mínimo en casa."));
+  oC.push(al("info","ℹ️ La tarifa para VE se solicita a la distribuidora (EEQ en Quito, CNEL en la Costa); sin ese trámite se cobra la tarifa residencial normal."))}
+ if(lugar==="casa"&&!modoVE)oC.push(al("info",`ℹ️ Con tarifa VE en valle esta carga costaría ≈ ${usd(eR*tV)}${eR*tV<costo?`, un ahorro de ${usd(costo-eR*tV)}`:""}. Vale la pena solicitarla si cargas seguido.`));
+ if(lugar==="electro"&&costo<0.005)oC.push(al("ok",`🟢 Carga en la red Kia: sin costo para el cliente. La misma energía en casa (valle) costaría ≈ ${usd(eR*tV)} y en una electrolinera comercial ≈ ${usd(eR*0.25)}.`));
+ else if(lugar==="electro"){const casa=eR*tV;oC.push(al("warn",`🟡 La misma energía en casa (valle) costaría ≈ ${usd(casa)}: la electrolinera cuesta ${(costo/casa).toFixed(1)} veces más. Úsala para viajes, no como carga diaria.`))}
+ $("oC").innerHTML=ob(oC);
+ $("cC").innerHTML=`<b>Conclusión:</b> esta carga cuesta ${usd(costo)} (promedio ${tp.toFixed(3)} USD/kWh). Llenar de 0 a 100 % a ese promedio costaría ≈ ${usd(bat/(1-perd)*tp)}.`;
+
+ // Km
+ $("tK").innerHTML=`<tr><th>Concepto</th><th class="r">Valor</th></tr><tr><td>Autonomía declarada</td><td class="r">${auto} km</td></tr><tr><td>Autonomía real (${Math.round(real*100)} %)</td><td class="r">${Math.round(auto*real)} km</td></tr><tr><td><b>Km que ganas</b></td><td class="r"><b>${Math.round(kmG)} km</b></td></tr><tr><td>Consumo desde la red</td><td class="r">${k100.toFixed(1)} kWh/100 km</td></tr><tr><td><b>Costo por km</b></td><td class="r"><b>$ ${ckm.toFixed(3)}</b></td></tr><tr><td>Costo por 100 km</td><td class="r">${usd(ckm*100)}</td></tr>`;
+ const oK=[];
+ if(k100>22)oK.push(al("warn",`🟡 Consumo alto (${k100.toFixed(1)} kWh/100 km). Un VE eficiente ronda 14–18. Revisa la autonomía real o el dato de batería.`));
+ else if(k100<12)oK.push(al("info",`ℹ️ Consumo muy bajo (${k100.toFixed(1)} kWh/100 km). Si tu autonomía real es menor a la ingresada, el costo por km será mayor.`));
+ else oK.push(al("ok",`🟢 Consumo de ${k100.toFixed(1)} kWh/100 km, dentro de lo esperable para un VE.`));
+ if(real>0.95)oK.push(al("warn","🟡 Una autonomía real sobre 95 % del dato oficial es optimista; en ciudad con pendientes suele ser menor."));
+ $("oK").innerHTML=ob(oK);
+ $("cK").innerHTML=`<b>Conclusión:</b> con ${usd(costo)} recorres ≈ ${Math.round(kmG)} km; cada kilómetro cuesta ${(ckm*100).toFixed(1)} centavos.`;
+
+ // Gasolina
+ $("vE").textContent=usd(costo);$("vG").textContent=cg>0?usd(cg):"—";
+ const oG=[];let rs="";
+ if(cg>0){const pc=ah/cg*100;
+  oG.push(ah>0?al("ok",`🟢 Ahorras ${usd(ah)} (${pc.toFixed(0)} %) frente a gasolina en ${Math.round(kmG)} km.`):al("bad",`🔴 Aquí el eléctrico cuesta ${usd(-ah)} más que la gasolina. Revisa el lugar de carga o la tarifa.`));
+  if(kmm>0)oG.push(al("info",`ℹ️ Con ${kmm} km/mes (≈ ${cargasMes.toFixed(1)} cargas como esta): eléctrico ${usd(cMesE)}/mes vs gasolina ${usd(cMesG)}/mes. Ahorro anual ≈ ${usd((cMesG-cMesE)*12)}.`));
+  $("cG").innerHTML=`<b>Conclusión:</b> a ${gp.toFixed(2)} USD/galón y ${kg} km/galón, ${Math.round(kmG)} km cuestan ${usd(cg)} en gasolina vs ${usd(costo)} eléctrico. En 1.000 km: ${usd(ckm*1000)} vs ${usd(1000/kg*gp)}.`}
+ else $("cG").innerHTML="<b>Conclusión:</b> ingresa el rendimiento a gasolina para comparar.";
+ $("oG").innerHTML=ob(oG);
+
+ R={bat,auto,s0,s1,kw,perd,real,dc,lim,pEf,hrs,eR,eB,eP,costo,tp,kmG,ckm,k100,gp,kg,cg,ah,kmm,cMesE,cMesG,modoVE,lugar,tipo,pf,fin,t0,tm};
+ drawTrip();proy();
+ // Resumen
+ const r=[];
+ r.push(`Cargas <b>${(s1-s0)} %</b> de un ${modelName()} en <b>${lugar==="casa"?"domicilio":"electrolinera "+tipo}</b> con ${kw} kW: <b>${usd(costo)}</b>, <b>${fh(hrs)}</b>, ≈ <b>${Math.round(kmG)} km</b> de recorrido.`);
+ if(cg>0)r.push(ah>0?`Frente a gasolina ahorras <b>${(ah/cg*100).toFixed(0)} %</b> por km.`:`En este escenario la gasolina sale más barata; el factor decisivo es el precio por kWh (${tp.toFixed(3)} USD).`);
+if(lugar==="electro"&&costo<0.005)r.push("Con la red de carga Kia la energía no tiene costo; el único gasto es el tiempo de carga.");
+ else if(lugar==="electro")r.push("La mayor palanca de ahorro es mover la carga diaria a casa y dejar la electrolinera para viajes.");
+ else if(modoVE&&pf.punta>0.01)r.push("La mayor palanca de ahorro es retrasar el inicio para evitar la hora punta.");
+ else if(hrs>10)r.push("La carga no cabe en una noche: considera mayor potencia o cargas parciales.");
+ else r.push("Tu configuración es eficiente; el siguiente paso es mantener la batería entre 20 % y 80 % en el uso diario.");
+ $("resumen").innerHTML=r.map(x=>`<p style="margin:6px 0">${x}</p>`).join("");
+}
+// ================= GRÁFICO DE RECORRIDO =================
+let tripF=0,playing=false,raf=0;
+const PX0=60,PX1=600,PY0=100,PY1=320; // área del gráfico
+const fx=(f)=>PX0+f*(PX1-PX0), fy=(f)=>PY1-f*(PY1-PY0);
+const n1=(v,d=1)=>v.toLocaleString("es-EC",{minimumFractionDigits:d,maximumFractionDigits:d});
+function drawTrip(){
+ const sv=$("trip");if(!R||!sv)return;
+ const {s1,auto,real,kg,gp,ckm}=R;
+ const kmMax=auto*real*s1/100, galMax=kg>0?kmMax/kg:0;
+ $("kmS").max=Math.max(1,Math.round(kmMax));
+ const km=tripF*kmMax, soc=s1-km/(auto*real)*100, aut=kmMax-km, gal=kg>0?km/kg:0;
+ // ejes y cuadrícula
+ let g="";
+ for(let p=0;p<=100;p+=20){const y=fy(p/100);g+=`<line class="grid" x1="${PX0}" y1="${y}" x2="${PX1}" y2="${y}"/><text x="${PX0-8}" y="${y+4}" text-anchor="end">${p} %</text>`;
+  g+=`<text x="${PX1+8}" y="${y-1}">${Math.round(kmMax*p/100)} km</text>`+(kg>0?`<text x="${PX1+8}" y="${y+11}" fill="#d9822b">${n1(galMax*p/100)} gal</text>`:"")}
+ for(let i=0;i<=5;i++){const x=fx(i/5);g+=`<line class="grid" x1="${x}" y1="${PY0}" x2="${x}" y2="${PY1}"/><text x="${x}" y="${PY1+16}" text-anchor="middle">${Math.round(kmMax*i/5)}</text>`}
+ g+=`<line class="ax" x1="${PX0}" y1="${PY1}" x2="${PX1}" y2="${PY1}"/><line class="ax" x1="${PX0}" y1="${PY0}" x2="${PX0}" y2="${PY1}"/><line class="ax" x1="${PX1}" y1="${PY0}" x2="${PX1}" y2="${PY1}"/>`;
+ g+=`<text x="${(PX0+PX1)/2}" y="${PY1+34}" text-anchor="middle" style="font-weight:600">Eje X: kilómetros recorridos</text>`;
+ g+=`<text x="14" y="${(PY0+PY1)/2}" transform="rotate(-90 14 ${(PY0+PY1)/2})" text-anchor="middle" fill="#1f9d74" style="font-weight:600">% batería</text>`;
+ // zona de reserva <20 %
+ g+=`<rect x="${PX0}" y="${fy(0.2)}" width="${PX1-PX0}" height="${PY1-fy(0.2)}" fill="#c0392b" opacity=".07"/><text x="${PX1-6}" y="${PY1-6}" text-anchor="end" fill="#c0392b">Reserva &lt; 20 %</text>`;
+ if(s1>20){const x20=fx((s1-20)/s1);g+=`<line x1="${x20}" y1="${PY0}" x2="${x20}" y2="${PY1}" stroke="#c0392b" stroke-dasharray="2 3"/><text x="${x20-4}" y="${PY0-6}" text-anchor="end" fill="#c0392b">cargar aquí ≈ ${Math.round(kmMax*(s1-20)/s1)} km</text>`}
+ // líneas
+ g+=`<line class="lb" x1="${fx(0)}" y1="${fy(s1/100)}" x2="${fx(1)}" y2="${fy(0)}"/>`;
+ g+=`<line class="la" x1="${fx(0)}" y1="${fy(1)}" x2="${fx(1)}" y2="${fy(0)}"/>`;
+ if(kg>0)g+=`<line class="lg" x1="${fx(0)}" y1="${fy(0)}" x2="${fx(1)}" y2="${fy(1)}"/>`;
+ // cursor
+ const cx=fx(tripF);
+ g+=`<line class="cur" x1="${cx}" y1="${78}" x2="${cx}" y2="${PY1}"/>`;
+ const pts=[[fy(Math.max(0,soc)/100),"#1f9d74",`${n1(Math.max(0,soc),0)} %`],[fy(1-tripF),"#2f6fd6",`${Math.round(aut)} km`]];
+ if(kg>0)pts.push([fy(tripF),"#d9822b",`${n1(gal)} gal`]);
+ const right=tripF<0.7;
+ // separa etiquetas que quedarían encimadas (mín. 15 px)
+ const lab=pts.map(p=>({y:p[0]-7})).map((o,i)=>({...o,i})).sort((a,b)=>a.y-b.y);
+ for(let k=1;k<lab.length;k++)if(lab[k].y-lab[k-1].y<15)lab[k].y=lab[k-1].y+15;
+ const ly={};lab.forEach(o=>ly[o.i]=o.y);
+ pts.forEach(([y,c,t],i)=>{g+=`<circle cx="${cx}" cy="${y}" r="5.5" fill="${c}" stroke="var(--card)" stroke-width="2"/><text x="${right?cx+9:cx-9}" y="${ly[i]}" text-anchor="${right?"start":"end"}" fill="${c}" style="font-weight:700;font-size:12px;paint-order:stroke;stroke:var(--card);stroke-width:3px">${t}</text>`});
+ // carretera y auto
+ const rot=(km*40)%360;
+ const wheel=x=>`<g transform="translate(${x} 0) rotate(${rot})"><circle r="8" fill="#222"/><circle r="4" fill="#bbb"/><line x1="-7" y1="0" x2="7" y2="0" stroke="#222" stroke-width="2"/></g>`;
+ const lvl=Math.max(0,Math.min(1,soc/100)),bc=soc<20?"#c0392b":soc<40?"#d9a400":"#1f9d74";
+ g+=`<rect class="road" x="${PX0-20}" y="64" width="${PX1-PX0+40}" height="14" rx="4"/><line class="roadln" x1="${PX0-14}" y1="71" x2="${PX1+14}" y2="71"/>`;
+ g+=`<g class="car" transform="translate(${cx} 62)">
+   <path d="M-34 -6 L-30 -18 Q-26 -22 -18 -22 L-10 -32 Q-6 -36 4 -36 L16 -36 Q24 -36 28 -28 L32 -22 Q40 -21 40 -14 L40 -6 Z" fill="#0b7a5c"/>
+   <path d="M-8 -30 L-2 -34 L10 -34 Q16 -34 20 -28 L22 -23 L-12 -23 Z" fill="#cfe9f5" opacity=".9"/>
+   <rect x="-22" y="-19" width="30" height="7" rx="2" fill="#fff" opacity=".9"/><rect x="-21" y="-18" width="${28*lvl}" height="5" rx="1.5" fill="${bc}"/>
+   <g transform="translate(0 -4)">${wheel(-20)}${wheel(26)}</g>
+   <text x="3" y="-42" text-anchor="middle" style="font-weight:700;fill:var(--ink)">${Math.round(km)} km</text></g>`;
+ sv.innerHTML=g;
+ // valores
+ $("kmS").value=Math.round(km);$("vKm").textContent=Math.round(km)+" km";
+ $("vSoc").textContent=n1(Math.max(0,soc),0)+" %";$("vAut").textContent=Math.round(aut)+" km";
+ $("vGal").textContent=kg>0?n1(gal,2)+" gal":"—";$("vCe").textContent=usd(km*ckm);$("vCg").textContent=kg>0?usd(gal*gp):"—";
+ const o=[];
+ if(km<0.5)o.push(al("info",`ℹ️ Arrastra el auto hacia la derecha. Sales con ${s1} % de batería y ${Math.round(kmMax)} km de autonomía real estimada.`));
+ else if(soc<=0.5)o.push(al("bad",`🔴 Batería en 0 %: llegaste al límite teórico. En la práctica el auto entra en modo tortuga antes; nunca planifiques un viaje hasta aquí.`));
+ else if(soc<10)o.push(al("bad",`🔴 Menos de 10 %: busca un cargador ya. Quedan ≈ ${Math.round(aut)} km y en subida pueden ser menos.`));
+ else if(soc<20)o.push(al("warn",`🟡 Entraste en la reserva (< 20 %). Es el momento recomendado para cargar; quedan ≈ ${Math.round(aut)} km.`));
+ else o.push(al("ok",`🟢 Batería en ${n1(soc,0)} %: zona cómoda. Te quedan ≈ ${Math.round(aut)} km antes de 0 %.`));
+ if(km>=0.5&&kg>0)o.push(al("info",`ℹ️ En ${Math.round(km)} km un auto a gasolina (${kg} km/gal) ya habría usado ${n1(gal,2)} galones = ${usd(gal*gp)}; el eléctrico, ${usd(km*ckm)}.`));
+ $("oR").innerHTML=ob(o);
+ $("cR").innerHTML=`<b>Conclusión:</b> con la batería al ${s1} % recorres ≈ ${Math.round(kmMax)} km hasta 0 % (≈ ${Math.round(kmMax*Math.max(0,s1-20)/s1)} km sin entrar en reserva). `+(kg>0?`Esa misma distancia exige ${n1(galMax,2)} galones de gasolina (${usd(galMax*gp)}) frente a ${usd(kmMax*ckm)} en electricidad.`:"");
+}
+function setTripFromEvent(e){
+ const sv=$("trip"),pt=sv.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+ const p=pt.matrixTransform(sv.getScreenCTM().inverse());
+ tripF=Math.max(0,Math.min(1,(p.x-PX0)/(PX1-PX0)));drawTrip();
+}
+(()=>{const sv=$("trip");let drag=false;
+ sv.addEventListener("pointerdown",e=>{drag=true;stopPlay();sv.setPointerCapture(e.pointerId);setTripFromEvent(e)});
+ sv.addEventListener("pointermove",e=>{if(drag)setTripFromEvent(e)});
+ sv.addEventListener("pointerup",()=>drag=false);sv.addEventListener("pointercancel",()=>drag=false);
+ $("kmS").addEventListener("input",e=>{e.stopPropagation();stopPlay();tripF=+$("kmS").value/Math.max(1,+$("kmS").max);drawTrip()});
+})();
+function stopPlay(){playing=false;cancelAnimationFrame(raf);$("play").textContent="▶ Animar"}
+$("play").onclick=()=>{
+ if(playing){stopPlay();return}
+ if(tripF>=1)tripF=0;playing=true;$("play").textContent="⏸ Pausar";
+ let last=performance.now();
+ const step=t=>{if(!playing)return;tripF=Math.min(1,tripF+(t-last)/8000);last=t;drawTrip();if(tripF>=1){stopPlay();return}raf=requestAnimationFrame(step)};
+ raf=requestAnimationFrame(step);
+};
+
+// ================= PESTAÑAS Y NOTAS DE CONCEPTOS =================
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+ document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("hide",p.id!==b.dataset.tab));
+ if(b.dataset.mode&&b.dataset.mode!==modo)setModo(b.dataset.mode);
+ window.scrollTo({top:0});
+});
+document.querySelectorAll(".ed[data-k]").forEach(el=>{
+ try{const v=localStorage.getItem("veC_"+el.dataset.k);if(v)el.innerHTML=v}catch(e){}
+ el.addEventListener("input",()=>{try{localStorage.setItem("veC_"+el.dataset.k,el.innerHTML)}catch(e){}});
+});
+
+function cerrarRep(){$("rep").classList.remove("show")}
+function reporte(){
+ if(!R){$("glob").innerHTML=al("bad","⚠️ Completa los datos correctamente para generar el reporte.");return}
+ const r=R,v=id=>$(id).value,mod=modelName();
+ const row=(a,b)=>`<tr><td>${a}</td><td class="r">${b}</td></tr>`;
+ const lug=r.lugar==="casa"?"Domicilio":"Electrolinera "+r.tipo;
+ let tar;
+ if(r.lugar==="casa")tar=r.modoVE?`Tarifa VE: valle ${v("tV")}, media ${v("tM")}, punta ${v("tP")} USD/kWh. Inicio ${v("hora")}`:`Tarifa general ${v("tG")} USD/kWh`;
+ else tar=`${v("tE")} USD/kWh`+(+v("fijo")>0?` + cargo fijo ${v("fijo")} USD`:"");
+ const hoy=new Date().toLocaleDateString("es-EC",{year:"numeric",month:"long",day:"numeric"});
+ const util=r.auto*r.real*0.6,rec=[];
+ rec.push(`<b>Usa el rango diario de 20 % a 80 %.</b> Con tu autonomía real estimada (${Math.round(r.auto*r.real)} km), ese rango te da ≈ ${Math.round(util)} km útiles por carga y cuida la batería.`);
+ if(r.s1>=95)rec.push(`<b>Tu objetivo es ${r.s1} %.</b> Cargar al 100 % a diario acelera el desgaste. Déjalo para viajes largos y sal poco después de terminar la carga.`);
+ if(r.s0<15)rec.push(`<b>Partes de ${r.s0} %.</b> Intenta no bajar de 10–15 %: es riesgoso en ruta y exige más a la batería. Con 10 % de reserva cuentas con ≈ ${Math.round(r.auto*r.real*0.1)} km.`);
+ if(r.dc)rec.push("<b>Carga rápida DC:</b> úsala en viajes. A diario desgasta más la batería; corta en 80 % porque después se vuelve lenta.");
+ if(r.lugar==="electro")rec.push(`<b>Lleva la carga diaria a casa.</b> En electrolinera pagarías ${usd(r.costo)} por esta carga; en casa, en horario valle, ≈ ${usd(r.eR*(+v("tV")))}.`);
+ if(r.lugar==="casa"&&r.modoVE&&r.pf.punta>0.01)rec.push("<b>Evita la hora punta (18–22 h).</b> Programa el inicio de la carga a las 22:00 para bajar el costo.");
+ if(r.lugar==="casa"&&r.kw<=3.5)rec.push("<b>Mejora tu cargador.</b> Con toma común de 220 V la carga es lenta. Un wallbox de 7,4 kW reduce el tiempo a la mitad; verifica que el circuito sea exclusivo.");
+ if(r.hrs>10)rec.push("<b>La carga no cabe en una noche.</b> Haz cargas parciales más frecuentes o usa un cargador de más potencia.");
+ if(r.real<0.8)rec.push(`<b>Tu autonomía real (${Math.round(r.real*100)} %) es baja.</b> Revisa presión de neumáticos, peso extra y velocidad: suelen explicar la diferencia.`);
+ if(r.k100>18)rec.push(`<b>Consumo alto (${r.k100.toFixed(1)} kWh/100 km).</b> Un VE eficiente ronda 14–18. Baja la velocidad y revisa los neumáticos.`);
+ rec.push("<b>Preacondiciona con el auto enchufado.</b> Enfriar o calentar la cabina antes de salir usa energía de la red y no de la batería.");
+ rec.push("<b>Revisa la presión de los neumáticos cada 2 semanas.</b> Neumáticos bajos aumentan el consumo y reducen la autonomía.");
+ rec.push("<b>Conduce a velocidad constante.</b> En carretera, por encima de 90–100 km/h el consumo sube con fuerza.");
+ rec.push("<b>Aprovecha el freno regenerativo.</b> En Quito, las bajadas recuperan energía; anticipa los frenados y usa el nivel de regeneración más alto que te resulte cómodo.");
+ rec.push("<b>No cargues peso innecesario</b> y usa moderadamente el aire acondicionado o la calefacción.");
+ rec.push("<b>Mide tu autonomía real.</b> Anota km recorridos y % de batería usado durante unas semanas y ajusta el dato «Autonomía real» de la calculadora.");
+ const obs=[...document.querySelectorAll(".obs .al")].map(e=>`<li>${e.textContent.trim()}</li>`).join("");
+ const conc=[...document.querySelectorAll(".concl")].map(e=>`<li>${e.innerHTML}</li>`).join("");
+ $("rep").innerHTML=`<p style="font-size:11px;letter-spacing:.22em;color:#555;margin:0 0 4px;font-weight:700">MF MOTOR INSIGHT</p><h1>Reporte de carga de vehículo eléctrico</h1><p class="sub">${mod}, ${lug}. Generado el ${hoy}</p>
+ <h2>1. Datos ingresados</h2><table>
+ ${row("Vehículo",mod)}${row("Batería útil / autonomía declarada",`${r.bat} kWh / ${r.auto} km`)}${row("Límite de carga del vehículo",`AC ${v("acmax")} kW, DC ${v("dcmax")} kW`)}
+ ${row("Estado de carga",`de ${r.s0} % a ${r.s1} %`)}${row("Lugar y cargador",`${lug}, ${r.kw} kW (potencia efectiva ${r.pEf.toFixed(1)} kW)`)}${row("Tarifa",tar)}
+ ${row("Pérdidas de carga / autonomía real",`${(r.perd*100).toFixed(1)} % / ${Math.round(r.real*100)} %`)}${row("Gasolina de comparación",`${r.gp} USD/galón, ${r.kg} km/galón`)}${row("Recorrido mensual",`${r.kmm} km`)}</table>
+${modo==="kia"?`<h2>1.1 Ficha técnica Kia</h2>${$("kiaFicha").innerHTML}`:""}
+ <h2>2. Resultados</h2><table>
+ ${row("Energía a la batería",r.eB.toFixed(2)+" kWh")}${row("Energía desde la red (lo que se paga)",r.eR.toFixed(2)+" kWh")}${row("Pérdidas",r.eP.toFixed(2)+" kWh")}
+ ${row("Tiempo de carga",fh(r.hrs)+(r.lugar==="casa"?`, ${v("hora")} → ${r.fin}`:""))}${row("<b>Costo de la carga</b>",`<b>${usd(r.costo)}</b> (promedio ${r.tp.toFixed(3)} USD/kWh)`)}
+ ${row("Kilómetros ganados",Math.round(r.kmG)+" km")}${row("Consumo",r.k100.toFixed(1)+" kWh/100 km")}${row("Costo por km",`$ ${r.ckm.toFixed(3)}`)}
+ ${r.cg>0?row("Gasolina para los mismos km",usd(r.cg))+row("Ahorro frente a gasolina",`${usd(r.ah)} (${(r.ah/r.cg*100).toFixed(0)} %)`):""}
+ ${r.kmm>0&&r.cg>0?row("Gasto mensual: eléctrico vs gasolina",`${usd(r.cMesE)} vs ${usd(r.cMesG)}`)+row("Ahorro anual estimado",usd((r.cMesG-r.cMesE)*12)):""}</table>
+ ${P160?`<h2>2.2 Proyección a 160.000 km (${Math.round(P160.h*100)} % de cargas en casa)</h2><table>${row("Energía: gasolina vs eléctrico",`${usd(P160.gT)} vs ${usd(P160.eT)}`)}${row("Mantenimiento: gasolina vs eléctrico",`${usd(P160.mgT)} vs ${usd(P160.meT)}`)}${row("<b>Total: gasolina vs eléctrico</b>",`<b>${usd(P160.totG)} vs ${usd(P160.totE)}</b>`)}${row("<b>Ahorro en 160.000 km</b>",`<b>${usd(P160.ah)}</b> (≈ ${P160.yrs} años)`)}</table>`:""}
+ <h2>3. Conclusiones y observaciones</h2><div class="box">${$("resumen").innerHTML}</div><ul>${conc}${obs}</ul>
+ <h2>4. Qué hacer para tener una buena autonomía</h2><ul>${rec.map(x=>`<li>${x}</li>`).join("")}</ul>
+ <p class="pie">Calculadora desarrollada por MF Motor Insight. Reporte referencial. Los datos del vehículo y las tarifas deben confirmarse con el concesionario, la distribuidora eléctrica o el operador de la electrolinera.</p>`;
+ $("rep").insertAdjacentHTML("afterbegin",`<div class="repbar"><b>Vista del reporte</b><button type="button" onclick="cerrarRep()">✕ Cerrar</button></div><p class="rephint">Para guardarlo en PDF usa la opción Imprimir o Compartir de tu navegador.</p>`);
+ $("rep").classList.add("show");window.scrollTo({top:0});
+ try{window.print()}catch(e){}
+}
+
+// ================= MODO KIA =================
+// [modelo, versión, kWh, km, ciclo/fuente autonomía, AC kW, DC kW, kW motor, hp, precio desde USD (null = consultar), autonomía real sugerida, nota]
+const K=[
+["EV2","Light",42.2,450,"Kia Ecuador (ciclo no indicado)",11,115,107,144,22999,0.65,"Kia Ecuador publica hasta 450 km. Esta misma batería homologa 317 km en el ciclo europeo WLTP; por eso la autonomía real sugerida es 65 % del dato local."],
+["EV2","Air",42.2,450,"Kia Ecuador (ciclo no indicado)",11,115,107,144,null,0.65,"Kia Ecuador publica hasta 450 km. Esta misma batería homologa 317 km en el ciclo europeo WLTP; por eso la autonomía real sugerida es 65 % del dato local."],
+["EV3","Standard Range",58.3,410,"Kia Ecuador (lanzamiento)",11,101,150,201,37999,0.85,"Precio de lanzamiento 2025; confirma el precio vigente."],
+["EV3","Long Range",81.4,600,"Kia Ecuador («más de 600 km»)",11,128,150,201,null,0.85,"Carga DC 10–80 % en ≈ 31 min."],
+["EV4","Air",58.3,456,"WLTP (ficha Kia Ecuador)",11,101,150,201,null,0.85,"Sedán eléctrico. Ficha técnica Kia Ecuador 2026."],
+["EV4","Wave",58.3,456,"WLTP (ficha Kia Ecuador)",11,101,150,201,null,0.85,"Sedán eléctrico. Ficha técnica Kia Ecuador 2026."],
+["EV4","Wave Plus",81.4,633,"WLTP (ficha Kia Ecuador)",11,128,150,201,null,0.85,"La versión de mayor autonomía de la gama Kia en Ecuador."],
+["EV5","Air 2WD",64.2,500,"Kia Ecuador («más de 500 km»)",11,102,160,215,43999,0.85,"Batería de 64,2 kWh según Kia Ecuador; confirma en la ficha de la versión."],
+["EV5","Wave 4WD",88.1,560,"Referencial (ficha global AWD)",11,140,230,308,56999,0.85,"Batería y autonomía de la ficha global de la versión 4WD; confírmalas con el concesionario."],
+["EV6","GT-Line 4WD",84,528,"Kia Ecuador (aprox.)",11,235,239,320,59999,0.85,"800 V: 10–80 % en 18 min según Kia Ecuador. 84 kWh en el modelo actual; unidades anteriores usan 77,4 kWh."],
+["EV9","GT-Line 4WD 7 pasajeros",99.8,505,"WLTP («más de 500 km»)",11,210,283,379,95999,0.85,"800 V: 10–80 % en 24 min según Kia Ecuador."],
+["PV5","Pasajeros",71.2,412,"WLTP (Kia Ecuador)",11,150,120,163,null,0.85,"Van eléctrica, 1.320 L de carga."],
+["PV5","Cargo",71.2,416,"WLTP (Kia Ecuador)",11,150,120,163,null,0.85,"Carga útil 790 kg, 4.420 L de volumen."]];
+let modo="all";
+const n0=v=>v.toLocaleString("es-EC");
+function poblarGeneral(){sel.innerHTML="";Object.keys(marcas).sort((a,b)=>tot(b)-tot(a)||a.localeCompare(b)).forEach(k=>{
+ const og=document.createElement("optgroup");og.label=k+(tot(k)>0?` — ${tot(k).toLocaleString("es-EC")} uds en el top 11 de ventas`:"");
+ marcas[k].sort((a,b)=>b[0][6]-a[0][6]||a[0][2]-b[0][2]).forEach(([m,i])=>{const o=document.createElement("option");o.value=i;
+  o.textContent=`${m[1]} — ${m[2]} kWh`+(m[6]>0?` · #${pos[i]} en ventas (${m[6].toLocaleString("es-EC")} uds)`:"");og.appendChild(o)});sel.appendChild(og)});
+ const og=document.createElement("optgroup");og.label="Otro";og.innerHTML='<option value="c">Otro modelo (ingresar datos)</option>';sel.appendChild(og);sel.value=0}
+function poblarKia(){sel.innerHTML="";let g=null;K.forEach((m,i)=>{if(!g||g.label!=="Kia "+m[0]){g=document.createElement("optgroup");g.label="Kia "+m[0];sel.appendChild(g)}
+ const o=document.createElement("option");o.value="k"+i;o.textContent=`${m[0]} ${m[1]} — ${m[2]} kWh · ${m[3]} km`+(m[9]?` · desde $${n0(m[9])}`:"");g.appendChild(o)});sel.value="k0"}
+function fichaKia(){const v=sel.value;if(modo!=="kia"||!v.startsWith("k")){$("kiaFicha").innerHTML="";return}
+ const m=K[+v.slice(1)],r=(a,b)=>`<tr><td>${a}</td><td class="r">${b}</td></tr>`;
+ $("kiaFicha").innerHTML=`<table>${r("Versión",`<b>Kia ${m[0]} ${m[1]}</b>`)}${r("Batería",m[2]+" kWh")}${r("Autonomía declarada",`${m[3]} km · ${m[4]}`)}${r("Carga AC máx. (cargador a bordo)",m[5]+" kW")}${r("Carga DC máx. (referencial)",m[6]+" kW")}${r("Potencia",`${m[7]} kW (${m[8]} hp)`)}${r("Precio",m[9]?`desde $ ${n0(m[9])}`:"Consultar en concesionario")}${r("Autonomía real sugerida",Math.round(m[10]*100)+" % del dato declarado")}</table><p class="note"><b>Nota de ficha:</b> ${m[11]} Fuente: kia.com/ec y fichas técnicas Kia Ecuador 2026; potencia DC según ficha global Kia.</p>`}
+function setModo(m){modo=m;document.body.classList.toggle("kia",m==="kia");
+ if(m==="kia"){poblarKia();$("red").value="0";$("tE").value=0}else{poblarGeneral();$("real").value=85;$("tE").value=0.25}
+ carga();fichaKia();calc()}
+function modelName(){const v=sel.value;if(v==="c")return "Otro modelo";if(v.startsWith("k")){const m=K[+v.slice(1)];return `Kia ${m[0]} ${m[1]}`}const m=M[+v];return m[0]+" "+m[1]}
+$("red").onchange=()=>{$("tE").value=$("red").value;calc()};
+$("mods").innerHTML=[...new Set(K.map(m=>m[0]))].map(n=>{const i=K.findIndex(m=>m[0]===n),vs=K.filter(m=>m[0]===n),p=vs.map(m=>m[9]).filter(Boolean);
+ return `<button data-k="${i}"><b>Kia ${n}</b><span>${[...new Set(vs.map(m=>m[2]))].join(" / ")} kWh · hasta ${Math.max(...vs.map(m=>m[3]))} km${p.length?` · desde $${n0(Math.min(...p))}`:""}</span></button>`}).join("");
+$("mods").onclick=e=>{const b=e.target.closest("button");if(!b)return;document.querySelector('.tabs button[data-mode="kia"]').click();sel.value="k"+b.dataset.k;carga();fichaKia();calc()};
+
+// ================= PROYECCIÓN 160.000 km =================
+const HITOS=[10000,20000,40000,60000,80000,100000,120000,140000,160000];
+let P160=null;
+function proy(){
+ if(!R)return;const v=id=>+$(id).value||0;
+ const h=Math.min(100,Math.max(0,v("hcasa")))/100;$("hel").value=Math.round((1-h)*100)+" %";
+ const pCasa=$("tmodo").value==="ve"?v("tV"):v("tG"),pEl=v("tE");
+ const kwhKm=R.k100/100,eKm=kwhKm*(h*pCasa+(1-h)*pEl),gKm=R.kg>0?R.gp/R.kg:0;
+ const mG=km=>Math.floor(km/Math.max(1,v("gInt")))*v("gCost")+km/10000*v("gWear");
+ const mE=km=>Math.floor(km/Math.max(1,v("eInt")))*v("eCost")+km/10000*v("eWear");
+ const kmA=(R.kmm||1000)*12,yr=km=>(km/kmA).toLocaleString("es-EC",{maximumFractionDigits:1});
+ const k=x=>x.toLocaleString("es-EC");
+ $("tPE").innerHTML=`<tr><th>Km</th><th class="r">Años aprox.</th><th class="r">kWh</th><th class="r">USD eléctrico</th><th class="r">Galones</th><th class="r">USD gasolina</th><th class="r">Ahorro acumulado</th></tr>`+
+  HITOS.map(km=>`<tr${km===160000?' class="tot"':''}><td>${k(km)}</td><td class="r">${yr(km)}</td><td class="r">${k(Math.round(km*kwhKm))}</td><td class="r">${usd(km*eKm)}</td><td class="r">${R.kg>0?k(Math.round(km/R.kg)):"—"}</td><td class="r">${usd(km*gKm)}</td><td class="r"><b>${usd(km*(gKm-eKm))}</b></td></tr>`).join("");
+ $("tPM").innerHTML=`<tr><th>Km</th><th class="r">Mant. gasolina</th><th class="r">USD gasolina</th><th class="r">Mant. eléctrico</th><th class="r">USD eléctrico</th><th class="r">Ahorro acumulado</th></tr>`+
+  HITOS.map(km=>`<tr${km===160000?' class="tot"':''}><td>${k(km)}</td><td class="r">${Math.floor(km/Math.max(1,v("gInt")))}</td><td class="r">${usd(mG(km))}</td><td class="r">${Math.floor(km/Math.max(1,v("eInt")))}</td><td class="r">${usd(mE(km))}</td><td class="r"><b>${usd(mG(km)-mE(km))}</b></td></tr>`).join("");
+ const T=160000,eT=T*eKm,gT=T*gKm,mgT=mG(T),meT=mE(T),totG=gT+mgT,totE=eT+meT,ah=totG-totE;
+ P160={h,eKm,gKm,eT,gT,mgT,meT,totG,totE,ah,yrs:yr(T),kwh:Math.round(T*kwhKm),gal:R.kg>0?Math.round(T/R.kg):0};
+ // gráfico animado
+ const X0=70,X1=600,Y0=24,Y1=210,mx=Math.max(totG,totE,1),top=niceTop(mx);
+ const X=km=>X0+km/T*(X1-X0),Y=u=>Y1-u/top*(Y1-Y0);
+ const ptsG=[0,...HITOS].map(km=>`${X(km)},${Y(km*gKm+mG(km))}`).join(" "),ptsE=[0,...HITOS].map(km=>`${X(km)},${Y(km*eKm+mE(km))}`).join(" ");
+ let g="";for(let i=0;i<=4;i++){const u=top*i/4;g+=`<line x1="${X0}" y1="${Y(u)}" x2="${X1}" y2="${Y(u)}" stroke="currentColor" style="color:var(--line)" stroke-dasharray="3 4"/><text x="${X0-6}" y="${Y(u)+4}" text-anchor="end" class="pt">$${k(Math.round(u))}</text>`}
+ [0,40000,80000,120000,160000].forEach(km=>g+=`<text x="${X(km)}" y="${Y1+16}" text-anchor="middle" class="pt">${k(km/1000)}k</text>`);
+ g+=`<text x="${(X0+X1)/2}" y="${Y1+34}" text-anchor="middle" class="pt" style="font-weight:600">km recorridos</text>`;
+ g+=`<polygon points="${X0},${Y1} ${ptsE} ${X1},${Y1}" fill="#1f9d74" opacity=".12"/>`;
+ g+=`<polyline points="${ptsG}" fill="none" stroke="#d9822b" stroke-width="3.5" pathLength="600" class="drawl"/>`;
+ g+=`<polyline points="${ptsE}" fill="none" stroke="#1f9d74" stroke-width="3.5" pathLength="600" class="drawl"/>`;
+ g+=`<circle r="6" fill="#d9822b"><animateMotion begin="indefinite" dur="3s" fill="freeze" path="M${ptsG.split(" ").join(" L")}"/></circle><circle r="6" fill="#1f9d74"><animateMotion begin="indefinite" dur="3s" fill="freeze" path="M${ptsE.split(" ").join(" L")}"/></circle>`;
+ g+=`<text x="${X1+6}" y="${Y(totG)+4}" class="pt" style="fill:var(--g3);font-weight:700">${usd(totG)}</text><text x="${X1+6}" y="${Y(totE)+4}" class="pt" style="fill:var(--g1);font-weight:700">${usd(totE)}</text>`;
+ $("pchart").innerHTML=g;$("pchart").querySelectorAll("animateMotion").forEach(a=>{try{a.beginElement()}catch(e){}});
+ const o=[];
+ o.push(ah>0?al("ok",`🟢 En 160.000 km (≈ ${P160.yrs} años con ${k(R.kmm||1000)} km/mes) el eléctrico ahorra <b>${usd(ah)}</b>: ${usd(gT-eT)} en energía y ${usd(mgT-meT)} en mantenimiento.`):al("bad",`🔴 Con estos datos el eléctrico cuesta ${usd(-ah)} más en 160.000 km. Revisa el % de carga en electrolinera o las tarifas.`));
+ if(h<0.7)o.push(al("warn",`🟡 Solo ${Math.round(h*100)} % de cargas en casa: la electrolinera encarece el km. Subir al 90 % en casa es la palanca más grande.`));
+ if(pEl===0&&h<1)o.push(al("info","ℹ️ Las cargas fuera de casa están en USD 0 (red Kia). Si el cliente usa también electrolineras comerciales, ajusta el precio para una proyección conservadora."));
+ o.push(al("info",`ℹ️ Gasolina: ${k(P160.gal)} galones. Eléctrico: ${k(P160.kwh)} kWh. Costo por km a largo plazo: ${(eKm*100).toFixed(1)} vs ${(gKm*100).toFixed(1)} centavos.`));
+ o.push(al("warn","🟡 Proyección con precios de hoy: no incluye inflación, cambios de tarifa, seguros, matrícula ni neumáticos (similares en ambos casos)."));
+ $("oP").innerHTML=ob(o);
+ $("cP").innerHTML=`<b>Conclusión:</b> en 160.000 km la gasolina suma ${usd(totG)} (combustible ${usd(gT)} + mantenimiento ${usd(mgT)}) y el eléctrico ${usd(totE)} (electricidad ${usd(eT)} + mantenimiento ${usd(meT)}). Diferencia: <b>${usd(ah)}</b>${ah>0?`, ≈ ${usd(ah/((T/kmA)*12))} por mes`:""}.`;
+}
+function niceTop(v){const p=10**Math.floor(Math.log10(v)),n=v/p;return [1,1.5,2,2.5,3,4,5,6,8,10].find(x=>n<=x)*p}
+
+calc();
+</script>
+</body>
+</html>
