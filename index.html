@@ -109,6 +109,13 @@ tr.tot td{background:var(--soft);font-weight:700}
 .repbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}.repbar button{border:1px solid #999;background:#fff;color:#111;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
 .rephint{font-size:12px;color:#555;margin:0 0 10px}
 @media print{.repbar,.rephint{display:none}#rep.show{position:static;padding:0}}
+.stats.lt div{border:1px solid var(--line);background:var(--bg)}.stats.lt span{opacity:1;color:var(--muted)}
+.fil input[type=search]{-webkit-appearance:none;appearance:none}
+.mapb{display:inline-block;white-space:nowrap;border:1px solid var(--line);border-radius:8px;padding:4px 8px;color:var(--ink);text-decoration:none;font-size:.82rem}
+.mapb:hover{border-color:var(--ink)}.delb{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:3px 7px;cursor:pointer}
+#tPts td{font-size:.84rem}
+.links{display:grid;gap:8px}.links a{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);text-decoration:none}
+.links a:hover{border-color:var(--ink)}.links b{display:block}.links span{font-size:.8rem;color:var(--muted)}
 /* ---------- Pestañas ---------- */
 .tabs{max-width:1180px;margin:12px auto 0;padding:0 16px;display:flex;gap:6px;border-bottom:1px solid var(--line);overflow-x:auto}
 .tabs button{border:1px solid transparent;border-bottom:0;background:none;color:var(--muted);padding:9px 16px;border-radius:10px 10px 0 0;cursor:pointer;font:inherit;font-weight:600;white-space:nowrap}
@@ -167,7 +174,7 @@ tr.tot td{background:var(--soft);font-weight:700}
   <p>Cada dato tiene una nota que explica qué es y cómo influye. Abajo verás conclusiones y observaciones según lo que ingreses.</p>
 </header>
 <div class="bar"><button id="tn">📝 Ocultar notas</button><button onclick="reporte()">🧾 Ver reporte</button><button id="theme">🌓 Tema</button></div>
-<nav class="tabs" role="tablist"><button class="on" data-tab="pCalc" data-mode="all" role="tab">🧮 Calculadora general</button><button data-tab="pCalc" data-mode="kia" role="tab"><span class="kbadge">KIA</span>Calculadora</button><button data-tab="pKia" role="tab">🏆 Beneficios KIA</button><button data-tab="pConc" role="tab">📘 Conceptos técnicos</button></nav>
+<nav class="tabs" role="tablist"><button class="on" data-tab="pCalc" data-mode="all" role="tab">🧮 Calculadora general</button><button data-tab="pCalc" data-mode="kia" role="tab"><span class="kbadge">KIA</span>Calculadora</button><button data-tab="pKia" role="tab">🏆 Beneficios KIA</button><button data-tab="pPts" role="tab">📍 Puntos de carga</button><button data-tab="pConc" role="tab">📘 Conceptos técnicos</button></nav>
 
 <div class="pane" id="pCalc">
 <main>
@@ -240,7 +247,7 @@ tr.tot td{background:var(--soft);font-weight:700}
     </div>
     <div id="boxEl" class="hide">
       <div class="kia-only"><label for="red">Red de carga</label><select id="red"><option value="0">Red de carga Kia — sin costo para clientes Kia</option><option value="0.25">Electrolinera comercial (≈ USD 0,25/kWh)</option></select>
-      <p class="note"><b>Beneficio Kia:</b> según Kia Ecuador, sus +20 electrolineras ultrarrápidas y +250 puntos intermedios no tienen costo para clientes Kia. Elige «comercial» para comparar.</p></div>
+      <p class="note"><b>Beneficio Kia:</b> según Kia Ecuador, sus +20 electrolineras ultrarrápidas y +250 puntos intermedios no tienen costo para clientes Kia. Elige «comercial» para comparar. Ubicaciones en la pestaña <b>📍 Puntos de carga</b>.</p></div>
       <label for="tE">Precio en electrolinera (USD/kWh)</label><input id="tE" type="number" step="0.01" value="0.25">
       <p class="note"><b>Qué es:</b> lo que cobra el operador por kWh (referencia: 0,25 a 0,285). Es el precio más variable, ajústalo al operador que uses.</p>
       <label for="fijo">Cargo fijo / parqueo (USD)</label><input id="fijo" type="number" step="0.01" value="0">
@@ -552,6 +559,60 @@ tr.tot td{background:var(--soft);font-weight:700}
 
 </div>
 </div>
+<!-- ================= PESTAÑA PUNTOS DE CARGA ================= -->
+<div class="pane hide" id="pPts">
+<div class="bwrap">
+ <div class="card">
+  <h2>⚡ Puntos de carga Kia y electrolineras en Ecuador</h2>
+  <div class="mini"><svg viewBox="0 0 520 80" aria-hidden="true">
+   <path d="M20 60 C120 10 200 75 300 35 S460 20 500 55" fill="none" stroke="currentColor" style="color:var(--line)" stroke-width="10" stroke-linecap="round"/>
+   <path d="M20 60 C120 10 200 75 300 35 S460 20 500 55" fill="none" stroke="#2f6fd6" stroke-width="3" class="flow"/>
+   <g transform="translate(110 30)"><circle r="14" fill="#1f9d74" opacity=".25"><animate attributeName="r" values="8;18;8" dur="2s" repeatCount="indefinite"/></circle><path d="M0 -14 C-9 -14 -12 -6 -12 -2 C-12 6 0 16 0 16 C0 16 12 6 12 -2 C12 -6 9 -14 0 -14 Z" fill="#1f9d74"/><path d="M2 -9 L-4 0 H1 L-2 8 L5 -2 H0 Z" fill="#fff"/></g>
+   <g transform="translate(300 28)"><circle r="14" fill="#d9a400" opacity=".25"><animate attributeName="r" values="8;18;8" dur="2s" begin=".6s" repeatCount="indefinite"/></circle><path d="M0 -14 C-9 -14 -12 -6 -12 -2 C-12 6 0 16 0 16 C0 16 12 6 12 -2 C12 -6 9 -14 0 -14 Z" fill="#d9a400"/><path d="M2 -9 L-4 0 H1 L-2 8 L5 -2 H0 Z" fill="#fff"/></g>
+   <g transform="translate(450 30)"><circle r="14" fill="#2f6fd6" opacity=".25"><animate attributeName="r" values="8;18;8" dur="2s" begin="1.2s" repeatCount="indefinite"/></circle><path d="M0 -14 C-9 -14 -12 -6 -12 -2 C-12 6 0 16 0 16 C0 16 12 6 12 -2 C12 -6 9 -14 0 -14 Z" fill="#2f6fd6"/><path d="M2 -9 L-4 0 H1 L-2 8 L5 -2 H0 Z" fill="#fff"/></g>
+   <text x="20" y="78" class="mm">Planifica la ruta: carga rápida en el camino, intermedia en el destino</text></svg></div>
+  <div class="stats lt">
+   <div><b>+20</b><span>electrolineras rápidas/ultrarrápidas Kia (meta 17+ al cierre de 2026)</span></div>
+   <div><b>+175 / +250</b><span>puntos de carga intermedia Kia, según la fuente</span></div>
+   <div><b>USD 0</b><span>para clientes Kia en la red Kia</span></div>
+   <div><b id="ptsN">—</b><span>sitios listados en esta pestaña</span></div>
+  </div>
+  <p class="note"><b>Cómo usarla:</b> filtra por red, ciudad o tipo de carga y toca <b>📍 Mapa</b> para abrir la ubicación en Google Maps. Las direcciones exactas y la disponibilidad en tiempo real están en los mapas en vivo de abajo. Agrega tus propios puntos en «Mis puntos».</p>
+  <div class="row3 fil">
+   <div><label for="fQ">Buscar</label><input id="fQ" type="search" placeholder="Ciudad, sitio, red…"></div>
+   <div><label for="fR">Red</label><select id="fR"><option value="">Todas</option></select></div>
+   <div><label for="fT">Tipo</label><select id="fT"><option value="">Todos</option><option>Rápida DC</option><option>Intermedia AC</option><option>Por confirmar</option></select></div>
+  </div>
+  <div class="tscroll"><table class="cmpt" id="tPts"></table></div>
+  <div class="obs"><h3>Observaciones</h3>
+   <div class="al info">ℹ️ <b>Red Kia completa:</b> Kia publica su mapa oficial con todos los puntos (rápidos e intermedios). Úsalo como fuente principal; esta tabla recoge los sitios que Kia y la prensa han nombrado.</div>
+   <div class="al warn">🟡 <b>Estado «Anunciada»:</b> son ciudades que Kia o el operador anunciaron. Algunas pueden estar ya operativas y otras no; confirma antes de planificar un viaje.</div>
+   <div class="al warn">🟡 <b>Conectores:</b> la mayoría de cargadores intermedios en Ecuador son Tipo 2 (AC). En carga rápida verifica que el sitio tenga CCS2 o el conector de tu auto.</div>
+  </div>
+  <div class="concl"><b>Conclusión:</b> para viajar en Ecuador combina la red rápida Kia en carretera (gratuita para clientes Kia) con carga intermedia o en casa en el destino. Revisa siempre el mapa en vivo antes de salir.</div>
+ </div>
+
+ <div class="bgrid">
+  <div class="card"><h2>🗺️ Mapas en vivo</h2>
+   <div class="links">
+    <a href="https://www.kia.com/ec/shopping-tools/PuntosDeCargaKiaEv.html" target="_blank" rel="noopener"><b>Puntos de carga Kia EV</b><span>Mapa oficial de Kia Ecuador</span></a>
+    <a href="https://www.plugshare.com/" target="_blank" rel="noopener"><b>PlugShare</b><span>Mapa mundial con fotos y comentarios de usuarios</span></a>
+    <a href="https://www.electromaps.com/en/charging-stations/ecuador" target="_blank" rel="noopener"><b>Electromaps Ecuador</b><span>Puntos por ciudad y tipo de conector</span></a>
+   </div>
+   <div class="concl"><b>Conclusión:</b> esta tabla sirve para planificar; el mapa en vivo confirma si el cargador está disponible hoy.</div>
+  </div>
+  <div class="card"><h2>📌 Mis puntos</h2>
+   <p class="src">Agrega puntos que conozcas (por ejemplo, el cargador de tu concesionario). Se guardan en este navegador.</p>
+   <div class="row"><div><label for="mN">Sitio</label><input id="mN" type="text" placeholder="Ej.: Kia Surmotor"></div><div><label for="mC">Ciudad</label><input id="mC" type="text" placeholder="Quito"></div></div>
+   <div class="row"><div><label for="mT">Tipo</label><select id="mT"><option>Rápida DC</option><option>Intermedia AC</option><option>Por confirmar</option></select></div><div><label for="mA">Acceso / costo</label><input id="mA" type="text" placeholder="Gratis clientes Kia"></div></div>
+   <div class="ctrl"><button type="button" id="mAdd">➕ Agregar a la tabla</button></div>
+   <div id="mMsg" class="src"></div>
+  </div>
+ </div>
+ <p class="src">Fuentes: <a href="https://www.eluniverso.com/noticias/economia/electrolinera-apertura-inversion-kia-san-gabriel-carchi-ecuador-2026-nota/">El Universo, abr-2026 (San Gabriel y plan Kia)</a> · <a href="https://www.eluniverso.com/noticias/economia/kia-electrolineras-vehiculos-electricos-ecuador-nota/">El Universo, may-2025 (Quito y Guayaquil)</a> · <a href="https://eluniverso.com/noticias/economia/kia-venta-vehiculos-ecuador-nuevos-modelos-2026-nota/">El Universo, jul-2026 (+250 puntos)</a> · <a href="https://www.motorterra.com/mas-puntos-de-carga-para-vehiculos-electricos-kia/">Motorterra (Galápagos, PUCE)</a> · <a href="https://www.eluniverso.com/noticias/economia/electrolineras-ecuador-inversion-nueva-resolucion-arconel-tarifario-2026-nota/">El Universo (Cóndor Energy)</a> · <a href="https://www.primicias.ec/economia/empresas/taxis-quito-carros-electricos-energia-mercado-automotor-110784/">Primicias (BYD)</a> · <a href="https://www.eloriente.com/articulo/empresas-privadas-implementan-electrolinera-en-guayaquil/36001">El Oriente (Terpel Voltex)</a> · <a href="https://ecuador.patiotuerca.com/blog/chevrolet-spark-euv-un-nuevo-icono-urbano-con-alma-electrica/">Patiotuerca (Chevrolet)</a> · <a href="https://www.vistazo.com/amp/enfoque/pasos-fuertes-de-ecuador-hacia-la-electromovilidad-IN2852596">Vistazo (EEQ)</a> · <a href="https://www.teleamazonas.com/auto-electrico-donde-recargarlo-gratis/">Teleamazonas (parqueaderos Quito)</a> · <a href="https://www.electromaps.com/en/charging-stations/ecuador/guayaquil/guayaquil">Electromaps (Guayaquil)</a>. Datos a octubre de 2026.</p>
+</div>
+</div>
+
 <!-- ================= PESTAÑA BENEFICIOS KIA ================= -->
 <div class="pane hide" id="pKia">
 <div class="bwrap">
@@ -1005,6 +1066,50 @@ function proy(){
  $("cP").innerHTML=`<b>Conclusión:</b> en 160.000 km la gasolina suma ${usd(totG)} (combustible ${usd(gT)} + mantenimiento ${usd(mgT)}) y el eléctrico ${usd(totE)} (electricidad ${usd(eT)} + mantenimiento ${usd(meT)}). Diferencia: <b>${usd(ah)}</b>${ah>0?`, ≈ ${usd(ah/((T/kmA)*12))} por mes`:""}.`;
 }
 function niceTop(v){const p=10**Math.floor(Math.log10(v)),n=v/p;return [1,1.5,2,2.5,3,4,5,6,8,10].find(x=>n<=x)*p}
+
+// ================= PUNTOS DE CARGA =================
+// [red, sitio, ciudad, provincia, tipo, acceso/costo, estado, detalle]
+const PTS=[
+["Kia","Electrolinera Kia — sector Plaza de Toros","Quito","Pichincha","Rápida DC","Sin costo para clientes Kia","Operativa","Carga rápida (≈ 20 min según Kia)"],
+["Kia","Electrolinera Kia — McDonald's norte de Quito","Quito","Pichincha","Rápida DC","Sin costo para clientes Kia","Operativa",""],
+["Kia","Electrolinera Kia — Av. Domingo Comín (sur)","Guayaquil","Guayas","Rápida DC","Sin costo para clientes Kia","Operativa",""],
+["Kia","Electrolinera Kia — Av. de las Américas (cerca del aeropuerto)","Guayaquil","Guayas","Rápida DC","Sin costo para clientes Kia","Operativa",""],
+["Kia","Electrolinera Kia — Peaje Panavial, vía E35 Bolívar–Rumichaca","San Gabriel","Carchi","Rápida DC","Exclusiva y gratuita para clientes Kia","Operativa","Ultrarrápida: 20–80 % en ≈ 30 min (abr-2026)"],
+["Kia","Electrolinera Kia solar","Santa Cruz","Galápagos","Rápida DC","Clientes Kia","Operativa","Alimentada con paneles solares"],
+["Kia","Punto Kia — PUCE (Pontificia Universidad Católica)","Quito","Pichincha","Por confirmar","Clientes Kia","Operativa",""],
+...["Ambato","Cuenca","Ibarra","Latacunga","Machala","Manta","Santo Domingo","Tonsupa","Pedernales","El Coca","Riobamba","Salinas"].map(c=>["Kia","Electrolinera rápida Kia (plan 2026)",c,"","Rápida DC","Sin costo para clientes Kia","Anunciada","Confirma la ubicación exacta en el mapa oficial Kia"]),
+["Kia","Red intermedia Kia (+175 a +250 puntos)","Nacional","","Intermedia AC","Sin costo para clientes Kia","Operativa","Gasolineras, restaurantes, centros comerciales y universidades. Ver mapa oficial Kia"],
+["Terpel Voltex","Electrolinera Terpel Voltex (alianza con Kia)","Guayaquil","Guayas","Rápida DC","USD 0,25/kWh","Operativa","Autoservicio 24 h; Tipo 2, CCS1 y CHAdeMO"],
+["BYD","Estación de carga rápida Parque Samanes (21 cargadores)","Guayaquil","Guayas","Rápida DC","Consultar","Operativa",""],
+["BYD","Cargadores rápidos BYD (2)","Loja","Loja","Rápida DC","Consultar","Operativa",""],
+["Cóndor Energy","Condor Charge — Av. Narcisa de Jesús","Guayaquil","Guayas","Rápida DC","Pago por kWh","Operativa",""],
+...["Salinas","Ambato","Santo Domingo","Manta"].map(c=>["Cóndor Energy","Electrolinera rápida Cóndor Energy",c,"","Rápida DC","Pago por kWh","Operativa","Inaugurada o actualizada en feb-2026"]),
+...["Riobamba","Quito"].map(c=>["Cóndor Energy","Electrolinera rápida Cóndor Energy (anunciada)",c,"","Rápida DC","Pago por kWh","Anunciada",""]),
+["Chevrolet","Puntos de carga en concesionarios Chevrolet (17, plan 33)","Nacional","","Por confirmar","Consultar","Operativa",""],
+["EEQ","Red de carga de la Empresa Eléctrica Quito (6 puntos, uno en Cumbayá)","Quito","Pichincha","Por confirmar","Consultar","Operativa","Incluye una estación de carga rápida en la EEQ"],
+...["Parqueadero Cadisan","Parqueadero La Ronda","Parqueadero Montúfar 1","Parqueadero San Blas","Parqueadero Bicentenario 2","Parqueadero Carolina 8","Parqueadero Parque de la Mujer","Terminal Carcelén","Terminal Quitumbe"].map(s=>["Municipio de Quito",s,"Quito","Pichincha","Intermedia AC","Gratuito (dato 2023; confirmar)","Por confirmar",""]),
+...["City Mall","Vermont Plaza Norte","Automotores Continental Orellana","Automotores Continental Tanca Marengo"].map(s=>["Otros",s,"Guayaquil","Guayas","Intermedia AC","Consultar","Operativa","Mayoría Tipo 2 (Electromaps)"])];
+let MIS=[];try{MIS=JSON.parse(localStorage.getItem("veMisPts")||"[]")}catch(e){MIS=[]}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function allPts(){return [...MIS.map(m=>["Mis puntos",m.n,m.c,"",m.t,m.a,"Agregado por ti","",true]),...PTS]}
+[...new Set(PTS.map(p=>p[0])),"Mis puntos"].forEach(r=>{const o=document.createElement("option");o.textContent=r;$("fR").appendChild(o)});
+function drawPts(){
+ const q=$("fQ").value.trim().toLowerCase(),fr=$("fR").value,ft=$("fT").value;
+ const L=allPts().filter(p=>(!fr||p[0]===fr)&&(!ft||p[4]===ft)&&(!q||p.slice(0,8).join(" ").toLowerCase().includes(q)));
+ const ic={"Operativa":"🟢","Anunciada":"🟡","Por confirmar":"⚪","Agregado por ti":"📌"};
+ $("tPts").innerHTML=`<tr><th>Red</th><th>Sitio</th><th>Ciudad</th><th>Tipo</th><th>Acceso / costo</th><th>Estado</th><th></th></tr>`+
+  (L.length?L.map((p,i)=>{const mq=encodeURIComponent((p[2]==="Nacional"?p[0]+" puntos de carga":p[1].replace(/\(.*?\)/g,"")+" "+p[2])+" Ecuador");
+   return `<tr${p[0]==="Kia"?' class="k"':''}><td>${esc(p[0])}</td><td>${esc(p[1])}${p[7]?`<div class="src">${esc(p[7])}</div>`:""}</td><td>${esc(p[2])}${p[3]?`<div class="src">${esc(p[3])}</div>`:""}</td><td>${esc(p[4])}</td><td>${esc(p[5])}</td><td>${ic[p[6]]||""} ${esc(p[6])}</td><td><a class="mapb" href="https://www.google.com/maps/search/?api=1&query=${mq}" target="_blank" rel="noopener">📍 Mapa</a>${p[8]?` <button type="button" class="delb" data-i="${MIS.findIndex(m=>m.n===p[1]&&m.c===p[2])}">✕</button>`:""}</td></tr>`}).join("")
+  :`<tr><td colspan="7">No hay puntos con ese filtro. Prueba con otra ciudad o quita los filtros.</td></tr>`);
+ $("ptsN").textContent=allPts().length;
+}
+["fQ","fR","fT"].forEach(id=>$(id).addEventListener("input",drawPts));
+$("mAdd").onclick=()=>{const n=$("mN").value.trim(),c=$("mC").value.trim();
+ if(!n||!c){$("mMsg").textContent="Escribe al menos el sitio y la ciudad.";return}
+ MIS.unshift({n,c,t:$("mT").value,a:$("mA").value.trim()||"—"});try{localStorage.setItem("veMisPts",JSON.stringify(MIS))}catch(e){}
+ $("mN").value="";$("mA").value="";$("mMsg").textContent=`Agregado: ${n} (${c}).`;drawPts()};
+$("tPts").onclick=e=>{const b=e.target.closest(".delb");if(!b)return;MIS.splice(+b.dataset.i,1);try{localStorage.setItem("veMisPts",JSON.stringify(MIS))}catch(e){}drawPts()};
+drawPts();
 
 calc();
 </script>
